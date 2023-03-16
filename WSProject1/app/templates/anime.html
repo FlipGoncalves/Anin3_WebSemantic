@@ -1,0 +1,20 @@
+{% load static %}
+
+<p>{{ data.Name }}</p>
+<p>Characters:</p>
+<table>
+	<tr>
+	  <th>Name</th>
+	  <th>Role</th>
+	  <th>Voice Actor</th>
+	</tr>
+	{% for character in data.Characters %}
+		<tr>
+			<td>{{ character.Name }}</td>
+			<td>{{ character.Role }}</td>
+			<td><a href="{% url 'voiceActorByName' nome=character.VoiceActor %}">{{ character.VoiceActor }}</a></td>
+		</tr>
+	{% endfor %}
+</table> 
+
+<a href="http://127.0.0.1:8000/anime/random">Random</a>
