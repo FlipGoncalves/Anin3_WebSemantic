@@ -1,5 +1,9 @@
+{% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Anime{% endblock %}
+
+{% block content %}
 <p>{{ data.Name }}</p>
 <p>Characters:</p>
 <table>
@@ -18,3 +22,5 @@
 </table> 
 
 <a href="http://127.0.0.1:8000/anime/random">Random</a>
+
+{% endblock %}

@@ -1,7 +1,15 @@
+{% extends 'base.html' %}
 {% load static %}
+{% load bootstrap4 %}
 
+{% block content %}
+<head>
+	<title>AniN3</title>
+	{% bootstrap_css %}
+	{% bootstrap_javascript %}
+<head>
 <link rel="stylesheet" href="{% static 'index.css' %}">
-
+  
 <div class="tree">
 	<ul>
 		<li>
@@ -40,5 +48,4 @@
 		</li>
 	</ul>
 </div>
-
-<a href="http://127.0.0.1:8000/anime/random">Random</a>
+{% endblock %}
