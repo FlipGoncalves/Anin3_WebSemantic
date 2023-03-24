@@ -1,13 +1,15 @@
 import pandas as pd
 from rdflib import Graph
 import re
+import random
 
+anime_ByID = {}
 
 def removeTitle(var):
     return re.sub("[<>\"]", "", var).replace("\\", "")
 
 def removeID(var):
-    return re.sub("[^\d\w]", "", var)
+    return re.sub("[^\d\w\'°.]", "", var)
 
 def loadCSV2NT():
 
@@ -105,7 +107,6 @@ def loadCSV2NT():
                     end_artist_ID = removeID(end_artist)
                     triples.append(f"<http://anin3/ent/{end_ID}> <http://anin3/pred/played_by> <http://anin3/ent/{end_artist_ID}>.")
                     triples.append(f"<http://anin3/ent/{end_artist_ID}> <http://anin3/pred/name> \"{end_artist}\".")
-
 
     with open("animes.nt", "w") as f:
         for triple in triples:
