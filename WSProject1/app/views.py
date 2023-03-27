@@ -6,7 +6,7 @@ from s4api.swagger import ApiClient
 import random
 
 endpoint = "http://localhost:7200"
-repo_name = "teste"
+repo_name = "anin3"
 client = ApiClient(endpoint=endpoint)
 accessor = GraphDBApi(client)
 
@@ -77,7 +77,7 @@ def animeTitle(request, title):
 
 def randomAnime(request):
 
-    rank = random.randint(1,10)
+    rank = random.randint(1,10000)
 
     query = """
     PREFIX ent: <http://anin3/ent/>
