@@ -4,23 +4,94 @@
 {% block title %}Anime{% endblock %}
 
 {% block content %}
-<p>{{ data.Name }}</p>
-<p>Characters:</p>
-<table>
-	<tr>
-	  <th>Name</th>
-	  <th>Role</th>
-	  <th>Voice Actor</th>
-	</tr>
-	{% for character in data.Characters %}
-		<tr>
-			<td>{{ character.Name }}</td>
-			<td>{{ character.Role }}</td>
-			<td><a href="{% url 'voiceActorByName' nome=character.VoiceActor %}">{{ character.VoiceActor }}</a></td>
-		</tr>
-	{% endfor %}
-</table> 
+<h1 class="pt-3">{{ data.Name }}</h1>
 
-<a href="http://127.0.0.1:8000/anime/random">Random</a>
+<ul class="nav nav-tabs pt-3" role="tablist">
+	<li class="nav-item">
+	  <a class="nav-link active" data-toggle="tab" href="#home" role="tab">Details</a>
+	</li>
+	<li class="nav-item">
+	  <a class="nav-link" data-toggle="tab" href="#characters" role="tab">Characters and Voice Actors</a>
+	</li>
+	<li class="nav-item">
+	  <a class="nav-link" data-toggle="tab" href="#contact" role="tab">Contact</a>
+	</li>
+  </ul>
+  
+  <div class="tab-content">
+	<div id="home" class="tab-pane fade show active p pt-3" role="tabpanel">
+		<div class="card">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-4 d-flex justify-content-center">
+					  	Score:
+					  	<p class="card-text"> {{ data.Score }}</p>
+					</div>
+					<div class="col-md-4 d-flex justify-content-center">
+						Popularity
+						<p class="card-text">{{ data.Popularity }}</p>
+					</div>
+					<div class="col-md-4 d-flex justify-content-center">
+						Number of Raters
+						<p class="card-text">{{ data.Raters }}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<section>
+			<h2 class="pt-3">Genres</h2>
+			<hr>
+			<h4><a href="#" class="badge badge-dark">Dark</a></h4>
+			<p class="card-text">{{ data.Synopsis }}</p>
+		</section>
+		<section>
+			<h2 class="pt-3">Studios</h2>
+			<hr>
+			<h4><a href="#" class="badge badge-dark">Dark</a></h4>
+			<p class="card-text">{{ data.Synopsis }}</p>
+		</section>
+	</div>
+	<div id="characters" class="tab-pane fade" role="tabpanel">
+	</br>
+			<div class="row">
+			{% for character in data.Characters %}
+				<div class="col-sm-3">
+					<div class="card border-primary mb-3" style="max-width: 18rem;">
+							<div class="card-header">Role: {{ character.Role }}</div>
+							<div class="card-body text-primary">
+							<h5 class="card-title">Name: {{ character.Name }}</h5>
+							<p class="card-text"><a href="{% url 'voiceActorByName' nome=character.VoiceActor %}">Voice Actor:{{ character.VoiceActor }}</a></p>
+							</div>
+					</div>
+				</div>
+			{% endfor %}
+			</div>
+	</div>
+	<div id="contact" class="tab-pane fade" role="tabpanel">
+	  <h1>Contact Page</h1>
+	  <p>Get in touch with me.</p>
+	</div>
+</div>
+
+<script>
+	// Add an event listener to each navbar link
+	document.querySelectorAll('.nav-link').forEach(function(link) {
+	  link.addEventListener('click', function(event) {
+		event.preventDefault();
+		// Remove active class from all navbar links
+		document.querySelectorAll('.nav-link').forEach(function(link) {
+		  link.classList.remove('active');
+		});
+		// Add active class to clicked navbar link
+		this.classList.add('active');
+		// Hide all tab panes
+		document.querySelectorAll('.tab-pane').forEach(function(tab) {
+		  tab.classList.remove('show', 'active');
+		});
+		// Show the corresponding tab pane
+		document.querySelector(this.getAttribute('href')).classList.add('show', 'active');
+	  });
+	});
+</script>
 
 {% endblock %}
