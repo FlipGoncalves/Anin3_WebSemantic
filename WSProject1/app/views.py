@@ -6,7 +6,7 @@ from s4api.swagger import ApiClient
 import random
 
 endpoint = "http://localhost:7200"
-repo_name = "teste"
+repo_name = "anin3"
 client = ApiClient(endpoint=endpoint)
 accessor = GraphDBApi(client)   
 pred = "http://anin3/pred/"
