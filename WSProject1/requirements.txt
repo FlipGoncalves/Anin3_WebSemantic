@@ -1,2 +1,3 @@
 rdflib
 s4api
+django

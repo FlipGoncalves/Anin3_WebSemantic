@@ -19,6 +19,7 @@ class AppConfig(AppConfig):
         for repo in res:
             if(repo["id"] == "anin3"):
                 repo_exists = True
+                print("Repository already exists, using existing one.")
         if(not repo_exists):
             file_dir = os.path.abspath(__file__)
             
@@ -28,33 +29,17 @@ class AppConfig(AppConfig):
 
             repo_config_dir = main_dir + "\\anin3-config.ttl"
 
-            print(repo_config_dir)
+            data_dir = main_dir + "\\animes.nt"
+            
+            with open(repo_config_dir, 'r', encoding='utf-8') as file:
+                data = file.readlines()
+
+            data[41] = "            graphdb:imports \"" + data_dir + "\" ;\n"
+            
+            with open(repo_config_dir, 'w', encoding='utf-8') as file:
+                file.writelines(data)
 
             #Repo does not exist
             with open(repo_config_dir, 'rb') as f: 
                 res = requests.post(endpoint + "/rest/repositories", files={'config':f})
-                print(res.status_code)
-                print(res.text)
-
-            #Check if dir to import data exists, if not create
-            user = os.getenv('USERPROFILE')
-
-            isExist = os.path.exists(user + "\graphdb-import")
-
-            if not isExist:
-                os.makedirs(user + "\graphdb-import")
-
-            #Import .nt file to dir to be imported to repository
-            data_dir = main_dir + "\\animes.nt"
-            print(data_dir)
-
-            shutil.copy(data_dir, user + "\graphdb-import")
-
-            data = '{"fileNames": ["animes.nt"]}'
-            headers = {'Content-type': 'application/json'}
-
-            res2 = requests.post(endpoint + "/rest/repositories/anin3/import/server",headers=headers , data=data)
-            print(res2.status_code)
-            print(res2.text)
-
-
+                print("Repository created and data inserted.")

@@ -19,7 +19,6 @@ from app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index),
     path('anime/random/', views.randomAnime),
     path('anime/<str:title>/', views.animeTitle, name="animeByName"),
     path('voiceactor/<str:nome>/', views.voiceActor, name="voiceActorByName"),
