@@ -1,13 +1,15 @@
 import pandas as pd
 from rdflib import Graph
 import re
+import random
 
+anime_ByID = {}
 
 def removeTitle(var):
     return re.sub("[<>\"]", "", var).replace("\\", "")
 
 def removeID(var):
-    return re.sub("[^\d\w]", "", var)
+    return re.sub("[^\d\w\'°.]", "", var)
 
 def loadCSV2NT():
 
@@ -71,7 +73,7 @@ def loadCSV2NT():
             triples.append(f"<http://anin3/ent/{char_ID}> <http://anin3/pred/role> \"{role_c}\".")
             triples.append(f"<http://anin3/ent/{char_ID}> <http://anin3/pred/name> \"{char_name}\".")
             if len(voice_actors) > 0:
-                vc_name = voice_actors[characters.index(character)%len(voice_actors)]
+                vc_name = voice_actors[characters.index(character)%len(voice_actors)].replace(",", "")
                 vc = removeID(vc_name)
                 triples.append(f"<http://anin3/ent/{vc}> <http://anin3/pred/played> <http://anin3/ent/{char_ID}>.")
                 triples.append(f"<http://anin3/ent/{vc}> <http://anin3/pred/name> \"{vc_name}\".")
@@ -87,7 +89,7 @@ def loadCSV2NT():
                 triples.append(f"<http://anin3/ent/{anime_ID}> <http://anin3/pred/opening> <http://anin3/ent/{op_ID}>.")
                 triples.append(f"<http://anin3/ent/{op_ID}> <http://anin3/pred/name> \"{op}\".")
                 if "[" in ops_artist or len(ops_artist) > 0:
-                    op_artist = ops_artist[ops.index(op)%len(ops_artist)]
+                    op_artist = ops_artist[ops.index(op)%len(ops_artist)].replace(",", "")
                     op_artist_ID = removeID(op_artist)
                     triples.append(f"<http://anin3/ent/{op_ID}> <http://anin3/pred/played_by> <http://anin3/ent/{op_artist_ID}>.")
                     triples.append(f"<http://anin3/ent/{op_artist_ID}> <http://anin3/pred/name> \"{op_artist}\".")
@@ -101,11 +103,10 @@ def loadCSV2NT():
                 triples.append(f"<http://anin3/ent/{anime_ID}> <http://anin3/pred/ending> <http://anin3/ent/{end_ID}>.")
                 triples.append(f"<http://anin3/ent/{end_ID}> <http://anin3/pred/name> \"{end}\".")
                 if "[" in ends_artist or len(ends_artist) > 0:
-                    end_artist = ends_artist[ends.index(end)%len(ends_artist)]
+                    end_artist = ends_artist[ends.index(end)%len(ends_artist)].replace(",", "")
                     end_artist_ID = removeID(end_artist)
                     triples.append(f"<http://anin3/ent/{end_ID}> <http://anin3/pred/played_by> <http://anin3/ent/{end_artist_ID}>.")
                     triples.append(f"<http://anin3/ent/{end_artist_ID}> <http://anin3/pred/name> \"{end_artist}\".")
-
 
     with open("animes.nt", "w") as f:
         for triple in triples:
