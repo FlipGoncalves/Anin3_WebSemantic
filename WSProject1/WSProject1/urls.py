@@ -18,6 +18,7 @@ from django.urls import path
 from app import views
 
 urlpatterns = [
+    path('',views.homePage),
     path('admin/', admin.site.urls),
     path('anime/random/', views.randomAnime),
     path('anime/<str:title>/', views.animeTitle, name="animeByName"),
