@@ -27,9 +27,9 @@ class AppConfig(AppConfig):
 
             main_dir = dir_partition[0] + dir_partition[1]
 
-            repo_config_dir = main_dir + "\\anin3-config.ttl"
+            repo_config_dir = main_dir + "/anin3-config.ttl"
 
-            data_dir = main_dir + "\\animes.nt"
+            data_dir = main_dir + "/animes.nt"
             
             with open(repo_config_dir, 'r', encoding='utf-8') as file:
                 data = file.readlines()

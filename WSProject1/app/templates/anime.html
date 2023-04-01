@@ -4,7 +4,7 @@
 {% block title %}Anime{% endblock %}
 
 {% block content %}
-<h1 class="pt-3">{{ data.Name }}</h1>
+<h1 class="pt-3">{{ data.title }}</h1>
 
 <ul class="nav nav-tabs pt-3" role="tablist">
 	<li class="nav-item">
@@ -14,7 +14,7 @@
 	  <a class="nav-link" data-toggle="tab" href="#characters" role="tab">Characters and Voice Actors</a>
 	</li>
 	<li class="nav-item">
-	  <a class="nav-link" data-toggle="tab" href="#contact" role="tab">Contact</a>
+	  <a class="nav-link" data-toggle="tab" href="#openings" role="tab">Openings and Endings</a>
 	</li>
   </ul>
   
@@ -24,16 +24,16 @@
 			<div class="card-body">
 				<div class="row">
 					<div class="col-md-4 d-flex justify-content-center">
-					  	Score:
-					  	<p class="card-text"> {{ data.Score }}</p>
+					  	Score: 
+					  	<p class="card-text"> {{ data.score }}</p>
 					</div>
 					<div class="col-md-4 d-flex justify-content-center">
-						Popularity
-						<p class="card-text">{{ data.Popularity }}</p>
+						Rank: 
+						<p class="card-text">{{ data.rank }}</p>
 					</div>
 					<div class="col-md-4 d-flex justify-content-center">
-						Number of Raters
-						<p class="card-text">{{ data.Raters }}</p>
+						Number of Raters: 
+						<p class="card-text">{{ data.num_members }}</p>
 					</div>
 				</div>
 			</div>
@@ -41,35 +41,57 @@
 		<section>
 			<h2 class="pt-3">Genres</h2>
 			<hr>
-			<h4><a href="#" class="badge badge-dark">Dark</a></h4>
-			<p class="card-text">{{ data.Synopsis }}</p>
+			{% for g in data.genre %}
+				<h4><a href="{% url 'genreTitle' genre=g %}" class="badge badge-dark" >{{ g }}</a></h4>
+			{% endfor %}
 		</section>
 		<section>
 			<h2 class="pt-3">Studios</h2>
 			<hr>
-			<h4><a href="#" class="badge badge-dark">Dark</a></h4>
-			<p class="card-text">{{ data.Synopsis }}</p>
+			<h4><a href="#" class="badge badge-dark">{{ data.made_by }}</a></h4>
 		</section>
 	</div>
 	<div id="characters" class="tab-pane fade" role="tabpanel">
 	</br>
 			<div class="row">
-			{% for character in data.Characters %}
+			{% for character in data.characters %}
 				<div class="col-sm-3">
 					<div class="card border-primary mb-3" style="max-width: 18rem;">
-							<div class="card-header">Role: {{ character.Role }}</div>
-							<div class="card-body text-primary">
-							<h5 class="card-title">Name: {{ character.Name }}</h5>
-							<p class="card-text"><a href="{% url 'voiceActorByName' nome=character.VoiceActor %}">Voice Actor:{{ character.VoiceActor }}</a></p>
+							<div class="card-header">Role: {{ character.role }}</div>
+							<div class="card-body text-dark">
+							<h5 class="card-title">Name: {{ character.name }}</h5>
+							<p class="card-text"><a href="{% url 'voiceActor' nome=character.voiceactor %}">Voice Actor:{{ character.voiceactor }}</a></p>
 							</div>
 					</div>
 				</div>
 			{% endfor %}
 			</div>
 	</div>
-	<div id="contact" class="tab-pane fade" role="tabpanel">
-	  <h1>Contact Page</h1>
-	  <p>Get in touch with me.</p>
+	<div id="openings" class="tab-pane fade" role="tabpanel">
+		<h2 class="pt-3">Openings</h2>
+		<hr>
+		{% for op in data.openings %}
+		<div class="col-sm-3">
+			<div class="card border-primary mb-3" style="max-width: 18rem;">
+					<div class="card-body text-dark">
+					<h5 class="card-title">Name: {{ op.name }}</h5>
+					<p class="card-text"> Artist:{{ op.opartist }}</a></p>
+					</div>
+			</div>
+		</div>
+		{% endfor %}
+		<h2 class="pt-3">Endings</h2>
+		<hr>
+		{% for ed in data.endings %}
+		<div class="col-sm-3">
+			<div class="card border-primary mb-3" style="max-width: 18rem;">
+					<div class="card-body text-dark">
+					<h5 class="card-title">Name: {{ ed.name }}</h5>
+					<p class="card-text"> Artist:{{ ed.endartist }}</a></p>
+					</div>
+			</div>
+		</div>
+		{% endfor %}
 	</div>
 </div>
 

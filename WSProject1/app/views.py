@@ -196,8 +196,9 @@ def randomAnime(request):
     return render(request, "anime.html", {'data': data})
 
 
-def searchByName(request, text):
+def searchByName(request):
 
+    text = request.GET.get('query')
     query = f"""
         PREFIX ent: <http://anin3/ent/>
         PREFIX pred: <http://anin3/pred/>
@@ -235,11 +236,11 @@ def searchByName(request, text):
         if "charname" in a.keys():
             data["characters"].append({"Title": a["title"]["value"], "Character": a["charname"]["value"]})
         elif "vcname" in a.keys():
-            data["vcname"].append({"Title": a["title"]["value"], "VoiceActor": a["vcname"]["value"]})
+            data["voiceactors"].append({"Title": a["title"]["value"], "VoiceActor": a["vcname"]["value"]})
         else:
-            data["vcname"].append({"Title": a["title"]["value"]})
+            data["animes"].append({"Title": a["title"]["value"]})
 
-    return render(request, "index.html", {'data': data})
+    return render(request, "search.html", {'data': data, 'text': text})
 
 
 def getGenres(request):
@@ -277,7 +278,7 @@ def animeByGenre(request, genre):
         PREFIX pred: <http://anin3/pred/>
         PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
-        SELECT DISTINCT ?anime ?rank
+        SELECT DISTINCT ?title ?rank
         WHERE {{ 
             {{
                 ?anime pred:theme "{genre}" .
@@ -288,6 +289,8 @@ def animeByGenre(request, genre):
             }}
             {{
                 ?anime pred:rank ?rank .
+                ?anime pred:title ?title.
+
             }}
         }} ORDER BY ASC(xsd:integer(?rank)) LIMIT 20
     """
@@ -300,11 +303,10 @@ def animeByGenre(request, genre):
     data = {"animes": []}
 
     for a in res['results']['bindings']:
-        data["animes"].append({"Title": a['anime']['value'], "Rank": a['rank']['value']})
-
+        data["animes"].append({"Title": a['title']['value'], "Rank": a['rank']['value']})
+    
     data = sorted(data["animes"], key=lambda a: int(a["Rank"]))
-
-    return render(request, "index.html", {'data': data})
+    return render(request, "genre.html", {'data': data, 'genre': genre})
 
 
 def insertData(request):
@@ -376,4 +378,18 @@ def insertData(request):
 
     """
 
-    return render(request, "index.html")
+    return render(request, "insert.html")
+
+def formData(request):
+    return render(request,"insert.html")
+
+
+# def add_book(request):
+#     if request.method == 'POST':
+#         form = BookForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             # redirect to success page
+#     else:
+#         form = BookForm()
+#     return render(request, 'add_book.html', {'form': form})

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Add Book</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div class="row mb-3">
+      <div class="col-sm-4">
+        <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
+        <input type="text" class="form-control" id="{{ form.title.id_for_label }}" name="{{ form.title.name }}" value="{{ form.title.value }}">
+      </div>
+      <div class="col-sm-4">
+        <label for="{{ form.author.id_for_label }}" class="form-label">Author</label>
+        <input type="text" class="form-control" id="{{ form.author.id_for_label }}" name="{{ form.author.name }}" value="{{ form.author.value }}">
+      </div>
+      <div class="col-sm-4">
+        <label for="{{ form.publication_date.id_for_label }}" class="form-label">Publication Date</label>
+        <input type="date" class="form-control" id="{{ form.publication_date.id_for_label }}" name="{{ form.publication_date.name }}" value="{{ form.publication_date.value }}">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-sm-4">
+        <label for="{{ form.isbn.id_for_label }}" class="form-label">ISBN</label>
+        <input type="text" class="form-control" id="{{ form.isbn.id_for_label }}" name="{{ form.isbn.name }}" value="{{ form.isbn.value }}">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Book</button>
+  </form>
+</div>
+{% endblock %}

@@ -27,53 +27,16 @@
 	<h2 class="pt-3">Top 10 Anime</h2>
 	<hr>
 	<div class="row">
+	{% for anime in data %}
 	<div class="col-sm-3">
 		<div class="card border-primary mb-3" style="max-width: 18rem;">
-				<div class="card-header">Role: </div>
+				<div class="card-header">Rank: #{{anime.Rank}}</div>
 				<div class="card-body text-primary">
-				<h5 class="card-title">Name: </h5>
-				<p class="card-text"></p>
+					<h5 class="card-title">Name: <a href="{% url 'animeTitle' title=anime.Title %}">{{anime.Title}}</a></h5>
+					<p class="card-text"></p>
 				</div>
 		</div>
 	</div>
+	{% endfor %}
 </section>
-
-<div class="tree">
-	<ul>
-		<li>
-			<a href="#">Parent</a>
-			<ul>
-				<li>
-					<a href="#">Child</a>
-					<ul>
-						<li>
-							<a href="#">Grand Child</a>
-						</li>
-					</ul>
-				</li>
-				<li>
-					<a href="#">Child</a>
-					<ul>
-						<li><a href="#">Grand Child</a></li>
-						<li>
-							<a href="#">Grand Child</a>
-							<ul>
-								<li>
-									<a href="#">Great Grand Child</a>
-								</li>
-								<li>
-									<a href="#">Great Grand Child</a>
-								</li>
-								<li>
-									<a href="#">Great Grand Child</a>
-								</li>
-							</ul>
-						</li>
-						<li><a href="#">Grand Child</a></li>
-					</ul>
-				</li>
-			</ul>
-		</li>
-	</ul>
-</div>
 {% endblock %}

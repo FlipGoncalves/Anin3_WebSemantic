@@ -8,8 +8,8 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 	<a class="navbar-brand" href="/">AniN3</a>
-	<form class="form-inline">
-		<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+	<form class="form-inline" method="get" action="{% url 'searchByName' %}">
+		<input class="form-control mr-sm-2" name="query" type="search" placeholder="Search" aria-label="Search">
 		<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 	</form>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,11 +27,19 @@
 			<a class="nav-link" href="#">Artists</a>
 		  </li>
 	  </ul>
-	</div>
+
+	</div>	  
+	<ul class="nav navbar-nav navbar-right">
+		<li>
+			<div class="btn-nav"><a class="btn btn-primary btn-small navbar-btn" href="/insert">Create</a>
+			</div>
+		</li>
+	</ul>
 </nav>
 
 
 <div class="container">
     {% block content %}
     {% endblock %}
+
 </div>
