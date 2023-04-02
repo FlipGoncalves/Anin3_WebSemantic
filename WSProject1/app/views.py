@@ -246,7 +246,9 @@ def searchByName(request):
 def getGenres(request):
 
     query = f"""
-        SELECT DISTINT ?genres
+        PREFIX ent: <http://anin3/ent/>
+        PREFIX pred: <http://anin3/pred/>
+        SELECT DISTINCT ?genres
         WHERE {{ 
             {{
                 ?s pred:theme ?genres .
@@ -268,7 +270,8 @@ def getGenres(request):
     for a in res['results']['bindings']:
         data["genres"].append(a["genres"]["value"])
 
-    return render(request, "index.html", {'data': data})
+    print(data)
+    return render(request, "allgenre.html", {'data': data})
 
 
 def animeByGenre(request, genre):

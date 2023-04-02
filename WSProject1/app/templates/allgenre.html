@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br>
+<h1>All genres</h1>
+<div class="row">
+	{% for genre in data.genres %}
+		<div class="col-sm-3">
+			<div class="card border-primary mb-3" style="max-width: 18rem;">
+					<div class="card-body text-dark">
+					<h5 class="card-title">Genre: <a href="{% url 'genreTitle' genre=genre %}">{{ genre }}</a></h5>
+					</div>
+			</div>
+		</div>
+	{% endfor %}
+
+{% endblock %}
