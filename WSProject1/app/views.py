@@ -85,7 +85,7 @@ def voiceActor(request, nome):
     query = f"""
         PREFIX ent: <http://anin3/ent/>
         PREFIX pred: <http://anin3/pred/>
-        SELECT *
+        SELECT ?character_name ?role ?animename
         WHERE {{
             ?voice_actor pred:name "{nome}".
             ?voice_actor pred:played ?character .
@@ -245,7 +245,9 @@ def searchByName(request, text):
 def getGenres(request):
 
     query = f"""
-        SELECT DISTINT ?genres
+        PREFIX ent: <http://anin3/ent/>
+        PREFIX pred: <http://anin3/pred/>
+        SELECT DISTINCT ?genres
         WHERE {{ 
             {{
                 ?s pred:theme ?genres .
