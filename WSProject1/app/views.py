@@ -313,79 +313,85 @@ def animeByGenre(request, genre):
 
 
 def insertData(request):
-
-    query = f"""
-
-        PREFIX ent: <http://anin3/ent/>
-        PREFIX pred: <http://anin3/pred/>
-        INSERT DATA
-        {{
-            ent:Character1 pred:name "char1";
-                        pred:role "role1" .	
-            
-            ent:Character2 pred:name "char2";
-                        pred:role "role2" .	
-            
-            ent:VA1 pred:played ent:Character1;
-                    pred:name "VA1" .	
-            
-            ent:VA2 pred:played ent:Character2;
-                    pred:name "VA2" .	
-            
-            ent:OP pred:name "OP" ;
-                pred:played_by ent:OPA .
-            
-            ent:END pred:name "END" ;
-                    pred:played_by ent:ENDA .
-            
-            ent:OPA pred:name "OPA" .
-                                    
-            ent:ENDA pred:name "ENDA" .
-            
-            ent:Teste1 pred:title "Anime Do Filipe" ;
-                pred:rank "AA" ;
-                pred:website "ggg" ;
-                pred:score "ggg" ;
-                pred:type "ggg" ;
-                pred:num_episodes "ggg" ;
-                pred:source "ggg" ;
-                pred:status "ggg" ;
-                pred:aired_date "ggg" ;
-                pred:age_rating "ggg" ;
-                pred:popularity "ggg" ;
-                pred:num_members "ggg" ;
-                pred:made_by "ggg" ;
-                pred:duration "ggg" ;
-                pred:premiered "ggg" ;
-                pred:demographic "ggg" ;
+    if request.method == 'POST':
+        # Get the form data
+        title = request.POST.get('title')
+        genre = request.POST.get('genre')
+        score = request.POST.get('score')
+        query = f"""
+            PREFIX ent: <http://anin3/ent/>
+            PREFIX pred: <http://anin3/pred/>
+            INSERT DATA
+            {{
+                ent:Character1 pred:name "char1";
+                            pred:role "role1" .	
+                
+                ent:Character2 pred:name "char2";
+                            pred:role "role2" .	
+                
+                ent:VA1 pred:played ent:Character1;
+                        pred:name "VA1" .	
+                
+                ent:VA2 pred:played ent:Character2;
+                        pred:name "VA2" .	
+                
+                ent:OP pred:name "OP" ;
+                    pred:played_by ent:OPA .
+                
+                ent:END pred:name "END" ;
+                        pred:played_by ent:ENDA .
+                
+                ent:OPA pred:name "OPA" .
                                         
-                pred:genre "ggg" ;
-                pred:genre "hhh" ;
-                                    
-                pred:theme "ggg" ;
-                pred:theme "hhh" ;
-                            
-                pred:adaptated_from "ggg" ;
+                ent:ENDA pred:name "ENDA" .
+                
+                ent:Teste1 pred:title "{title}" ;
+                    pred:rank "AA" ;
+                    pred:website "ggg" ;
+                    pred:score "{score}" ;
+                    pred:type "ggg" ;
+                    pred:num_episodes "ggg" ;
+                    pred:source "ggg" ;
+                    pred:status "ggg" ;
+                    pred:aired_date "ggg" ;
+                    pred:age_rating "ggg" ;
+                    pred:popularity "ggg" ;
+                    pred:num_members "ggg" ;
+                    pred:made_by "ggg" ;
+                    pred:duration "ggg" ;
+                    pred:premiered "ggg" ;
+                    pred:demographic "ggg" ;
                                             
-                pred:sequel ent:ID ;
-                                    
-                pred:prequel ent:Bleach ;
-                                    
-                pred:voiced_at ent:VA1 ;
-                pred:starring ent:Character1 ;
-                pred:voiced_at ent:VA2 ;
-                pred:starring ent:Character2 ;
-                pred:opening ent:OP ;             
-                pred:ending ent:END .
-        }}
-
-    """
-
-    return render(request, "insert.html")
-
-def formData(request):
-    return render(request,"insert.html")
-
+                    pred:genre "{genre}" ;
+                    pred:genre "hhh" ;
+                                        
+                    pred:theme "ggg" ;
+                    pred:theme "hhh" ;
+                                
+                    pred:adaptated_from "ggg" ;
+                                                
+                    pred:sequel ent:ID ;
+                                        
+                    pred:prequel ent:Bleach ;
+                                        
+                    pred:voiced_at ent:VA1 ;
+                    pred:starring ent:Character1 ;
+                    pred:voiced_at ent:VA2 ;
+                    pred:starring ent:Character2 ;
+                    pred:opening ent:OP ;             
+                    pred:ending ent:END .
+            }}
+        """
+        # Create an object in the graph database
+        payload_query = {"query": query}
+        res = accessor.sparql_update(body=payload_query, repo_name=repo_name)
+        print(res)
+        # Return a response
+        return render(request, 'insert.html')
+    
+    else:
+        return render(request, 'insert.html')
+    
 
 # def add_book(request):
 #     if request.method == 'POST':

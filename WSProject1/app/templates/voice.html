@@ -10,7 +10,7 @@
 					<div class="card-header">Role: {{ character.Role }}</div>
 					<div class="card-body text-dark">
 					<h5 class="card-title">Name: {{ character.Name }}</h5>
-					<p class="card-text">{{ character.Anime }}</p>
+					<p class="card-text"><a href="{% url 'animeTitle' title=character.Anime %}">{{ character.Anime }}</a></p>
 					</div>
 			</div>
 		</div>

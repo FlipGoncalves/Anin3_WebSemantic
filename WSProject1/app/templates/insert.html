@@ -2,30 +2,24 @@
 
 {% block content %}
 <div class="container mt-4">
-  <h2>Add Book</h2>
-  <form method="post">
+  <h2>Add Anime</h2>
+  <form method="post" action="{% url 'insertData' %}">
     {% csrf_token %}
     <div class="row mb-3">
       <div class="col-sm-4">
-        <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
-        <input type="text" class="form-control" id="{{ form.title.id_for_label }}" name="{{ form.title.name }}" value="{{ form.title.value }}">
+        <label for="id_title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="id_title" name="title">
       </div>
       <div class="col-sm-4">
-        <label for="{{ form.author.id_for_label }}" class="form-label">Author</label>
-        <input type="text" class="form-control" id="{{ form.author.id_for_label }}" name="{{ form.author.name }}" value="{{ form.author.value }}">
+        <label for="id_genre" class="form-label">Genre</label>
+        <input type="text" class="form-control" id="id_genre" name="genre">
       </div>
       <div class="col-sm-4">
-        <label for="{{ form.publication_date.id_for_label }}" class="form-label">Publication Date</label>
-        <input type="date" class="form-control" id="{{ form.publication_date.id_for_label }}" name="{{ form.publication_date.name }}" value="{{ form.publication_date.value }}">
+        <label for="id_score" class="form-label">Score</label>
+        <input type="text" class="form-control" id="id_score" name="score">
       </div>
     </div>
-    <div class="row mb-3">
-      <div class="col-sm-4">
-        <label for="{{ form.isbn.id_for_label }}" class="form-label">ISBN</label>
-        <input type="text" class="form-control" id="{{ form.isbn.id_for_label }}" name="{{ form.isbn.name }}" value="{{ form.isbn.value }}">
-      </div>
-    </div>
-    <button type="submit" class="btn btn-primary">Add Book</button>
+    <button type="submit" class="btn btn-primary">Add Anime</button>
   </form>
 </div>
 {% endblock %}

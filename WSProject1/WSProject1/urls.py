@@ -26,6 +26,6 @@ urlpatterns = [
     path('voiceactor/<str:nome>/', views.voiceActor, name="voiceActor"),
     path('genre/<str:genre>/', views.animeByGenre, name="genreTitle"),
     path('search/', views.searchByName, name="searchByName"),
-    path('insert/', views.formData),
     path('allgenres/', views.getGenres),
+    path('insert/', views.insertData, name="insertData"),
 ]
