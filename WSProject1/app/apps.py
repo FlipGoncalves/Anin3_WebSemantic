@@ -1,5 +1,7 @@
 from django.apps import AppConfig
 import json
+from s4api.graphdb_api import GraphDBApi
+from s4api.swagger import ApiClient
 import requests
 import os
 import shutil
@@ -7,6 +9,8 @@ import shutil
 endpoint = "http://localhost:7200"
 repo_name = "anin3"
 get_repositories = "/rest/repositories"
+client = ApiClient(endpoint=endpoint)
+accessor = GraphDBApi(client)   
 
 class AppConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
@@ -27,9 +31,9 @@ class AppConfig(AppConfig):
 
             main_dir = dir_partition[0] + dir_partition[1]
 
-            repo_config_dir = main_dir + "/anin3-config.ttl"
+            repo_config_dir = os.path.join(main_dir + os.sep, "anin3-config.ttl")
 
-            data_dir = main_dir + "/animes.nt"
+            data_dir = os.path.join(main_dir + os.sep, "animes.nt")
             
             with open(repo_config_dir, 'r', encoding='utf-8') as file:
                 data = file.readlines()
