@@ -4,11 +4,13 @@ import json
 from s4api.graphdb_api import GraphDBApi
 from s4api.swagger import ApiClient
 import random
+import requests
+import re
 
 endpoint = "http://localhost:7200"
 repo_name = "anin3"
 client = ApiClient(endpoint=endpoint)
-accessor = GraphDBApi(client)   
+accessor = GraphDBApi(client)
 pred = "http://anin3/pred/"
 
 
@@ -318,87 +320,42 @@ def insertData(request):
         title = request.POST.get('title')
         genre = request.POST.get('genre')
         score = request.POST.get('score')
+
+        identification = re.sub("[^\d\w\'°.]", "", title)
+
         query = f"""
             PREFIX ent: <http://anin3/ent/>
             PREFIX pred: <http://anin3/pred/>
             INSERT DATA
             {{
-                ent:Character1 pred:name "char1";
-                            pred:role "role1" .	
-                
-                ent:Character2 pred:name "char2";
-                            pred:role "role2" .	
-                
-                ent:VA1 pred:played ent:Character1;
-                        pred:name "VA1" .	
-                
-                ent:VA2 pred:played ent:Character2;
-                        pred:name "VA2" .	
-                
-                ent:OP pred:name "OP" ;
-                    pred:played_by ent:OPA .
-                
-                ent:END pred:name "END" ;
-                        pred:played_by ent:ENDA .
-                
-                ent:OPA pred:name "OPA" .
-                                        
-                ent:ENDA pred:name "ENDA" .
-                
-                ent:Teste1 pred:title "{title}" ;
-                    pred:rank "AA" ;
-                    pred:website "ggg" ;
+                ent:{identification} pred:title "{title}" ;
+                    pred:rank "1000000000" ;
+                    pred:website "" ;
                     pred:score "{score}" ;
-                    pred:type "ggg" ;
-                    pred:num_episodes "ggg" ;
-                    pred:source "ggg" ;
-                    pred:status "ggg" ;
-                    pred:aired_date "ggg" ;
-                    pred:age_rating "ggg" ;
-                    pred:popularity "ggg" ;
-                    pred:num_members "ggg" ;
-                    pred:made_by "ggg" ;
-                    pred:duration "ggg" ;
-                    pred:premiered "ggg" ;
-                    pred:demographic "ggg" ;
-                                            
+                    pred:type "" ;
+                    pred:num_episodes "" ;
+                    pred:source "" ;
+                    pred:status "" ;
+                    pred:aired_date "" ;
+                    pred:age_rating "" ;
+                    pred:popularity "" ;
+                    pred:num_members "" ;
+                    pred:made_by "" ;
+                    pred:duration "" ;
+                    pred:premiered "" ;
+                    pred:demographic "" ;
                     pred:genre "{genre}" ;
-                    pred:genre "hhh" ;
-                                        
-                    pred:theme "ggg" ;
-                    pred:theme "hhh" ;
-                                
-                    pred:adaptated_from "ggg" ;
-                                                
-                    pred:sequel ent:ID ;
-                                        
-                    pred:prequel ent:Bleach ;
-                                        
-                    pred:voiced_at ent:VA1 ;
-                    pred:starring ent:Character1 ;
-                    pred:voiced_at ent:VA2 ;
-                    pred:starring ent:Character2 ;
-                    pred:opening ent:OP ;             
-                    pred:ending ent:END .
+                    pred:adaptated_from "" ;
             }}
         """
-        # Create an object in the graph database
-        payload_query = {"query": query}
-        res = accessor.sparql_update(body=payload_query, repo_name=repo_name)
-        print(res)
-        # Return a response
+
+        payload_query = {"update": query, "baseURI": "http://anin3/"}
+
+        res = requests.post(endpoint+f"/repositories/{repo_name}/statements", params=payload_query, headers={"Content-Type": "application/rdf+xml", 'Accept': 'application/json'})
+
+        if res.status_code != 204:
+            return render(request, 'insert.html', {'error': "Could not create a new Anime"})
+        
         return render(request, 'insert.html')
-    
     else:
         return render(request, 'insert.html')
-    
-
-# def add_book(request):
-#     if request.method == 'POST':
-#         form = BookForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             # redirect to success page
-#     else:
-#         form = BookForm()
-#     return render(request, 'add_book.html', {'form': form})
