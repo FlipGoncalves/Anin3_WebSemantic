@@ -1,5 +1,5 @@
 import pandas as pd
-from rdflib import Graph
+from rdflib import Graph, Namespace
 import re
 import random
 
@@ -9,7 +9,7 @@ def removeTitle(var):
     return re.sub("[<>\"]", "", var).replace("\\", "")
 
 def removeID(var):
-    return re.sub("[^\d\w\'°.]", "", var)
+    return re.sub("[^\da-zA-Z\'°.]", "00", var.replace(" ", ""))
 
 def loadCSV2NT():
 
@@ -117,7 +117,13 @@ loadCSV2NT()
 g = Graph()
 g.parse('animes.nt')
 
+pred = Namespace("http://anin3/pred/")
+ent = Namespace("http://anin3/ent/")
+
+g.bind("pred", pred)
+g.bind("ent", ent)
+
 n3 = g.serialize(format='n3')
+
 with open("animes.n3", "w") as f:
-    for triple in n3:
-        f.write(triple)
+    f.write(n3)
