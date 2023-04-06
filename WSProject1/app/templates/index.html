@@ -39,24 +39,5 @@
 	{% endfor %}
 </section>
 
-<script>	
-	console.log('Teste')
-	var data = "{{data}}";
-	var data =  data.replaceAll("&#x27;", "'")
-	data = data.replaceAll("&quot;", "\"")
-	const filename = 'data.json';
-	const jsonStr = JSON.stringify(data);
-	console.log(data);
-	console.log(jsonStr)
 
-	let element = document.createElement('a');
-	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonStr));
-	element.setAttribute('download', filename);
-
-	element.style.display = 'none';
-	document.body.appendChild(element);
-
-	element.click();
-
-	document.body.removeChild(element);</script>
 {% endblock %}

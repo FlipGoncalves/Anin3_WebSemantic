@@ -5,7 +5,7 @@
 
 {% block content %}
 
-<button class="btn btn-primary" style="float: right; position: relative; top: 25px; right: 10px;">Download Anime Info</button>
+<button id="btn" class="btn btn-primary" style="float: right; position: relative; top: 25px; right: 10px;">Download Anime Info</button>
 <h1 class="pt-3">{{ data.title }}</h1>
 
 
@@ -124,6 +124,31 @@
 		// Show the corresponding tab pane
 		document.querySelector(this.getAttribute('href')).classList.add('show', 'active');
 	  });
+	});
+	function download() {
+		console.log('Teste')
+		var data = "{{data}}";
+		var data =  data.replaceAll("&#x27;", "'")
+		data = data.replaceAll("&quot;", "\"")
+		const filename = 'data.json';
+		const jsonStr = JSON.stringify(data);
+		console.log(data);
+		console.log(jsonStr)
+	
+		let element = document.createElement('a');
+		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonStr));
+		element.setAttribute('download', filename);
+	
+		element.style.display = 'none';
+		document.body.appendChild(element);
+	
+		element.click();
+	
+		document.body.removeChild(element);
+	}
+	let btn = document.getElementById("btn");
+	btn.addEventListener('click', event => {
+	download();
 	});
 </script>
 
