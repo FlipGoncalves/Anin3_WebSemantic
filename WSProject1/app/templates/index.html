@@ -8,16 +8,15 @@
 	{% bootstrap_css %}
 	{% bootstrap_javascript %}
 <head>
-<link rel="stylesheet" href="{% static 'index.css' %}">
 
 <section class="text-center pt-5">
 	<div class="container">
 	  <h1 class="jumbotron-heading">AniN3</h1>
 	  <p class="lead text-muted">An anime database based on N3 and GraphDB made by students in Universidade de Aveiro in context of the Web semantica classes</p>
 	  <p>
-		<form class="form-inline justify-content-center">
-			<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-			<button class="btn btn-outline-success my-2 my-lg-0" type="submit">Search</button>
+		<form class="form-inline justify-content-center"  method="get" action="{% url 'searchByName' %}">
+			<input class="form-control mr-sm-2" name="query" type="search" placeholder="Search" aria-label="Search">
+			<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 		</form>
 	  </p>
 	</div>
@@ -29,7 +28,7 @@
 	<div class="row">
 	{% for anime in data %}
 	<div class="col-sm-3">
-		<div class="card border-primary mb-3" style="max-width: 18rem;">
+		<div class="card border-primary mb-3" style="height:175px" style="max-width: 18rem;">
 				<div class="card-header">Rank: #{{anime.Rank}}</div>
 				<div class="card-body text-primary">
 					<h5 class="card-title">Name: <a href="{% url 'animeTitle' title=anime.Title %}">{{anime.Title}}</a></h5>
