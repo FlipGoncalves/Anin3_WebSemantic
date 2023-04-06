@@ -72,6 +72,8 @@ def homePage(request):
 
     data = {"animes": []}
 
+    print(res)
+
     for a in res['results']['bindings']:
         data["animes"].append({"Title": a['title']['value'], "Rank": a['rk']['value']})
 
