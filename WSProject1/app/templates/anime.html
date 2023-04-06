@@ -4,7 +4,10 @@
 {% block title %}Anime{% endblock %}
 
 {% block content %}
+
+<button class="btn btn-primary" style="float: right; position: relative; top: 25px; right: 10px;">Download Anime Info</button>
 <h1 class="pt-3">{{ data.title }}</h1>
+
 
 <ul class="nav nav-tabs pt-3" role="tablist">
 	<li class="nav-item">
@@ -41,9 +44,13 @@
 		<section>
 			<h2 class="pt-3">Genres</h2>
 			<hr>
+			<div class="row">
 			{% for g in data.genre %}
-				<h4><a href="{% url 'genreTitle' genre=g %}" class="badge badge-dark" >{{ g }}</a></h4>
+				<div class="col-md-auto">
+					<h4><a href="{% url 'genreTitle' genre=g %}" class="badge badge-dark" >{{ g }}</a></h4>
+				</div>
 			{% endfor %}
+			</div>
 		</section>
 		<section>
 			<h2 class="pt-3">Studios</h2>
@@ -70,18 +77,21 @@
 	<div id="openings" class="tab-pane fade" role="tabpanel">
 		<h2 class="pt-3">Openings</h2>
 		<hr>
-		{% for op in data.openings %}
-		<div class="col-sm-3">
-			<div class="card border-primary mb-3" style="max-width: 18rem;">
-					<div class="card-body text-dark">
-					<h5 class="card-title">Name: {{ op.name }}</h5>
-					<p class="card-text"> Artist:{{ op.opartist }}</a></p>
-					</div>
+		<div class="row">
+			{% for op in data.openings %}
+			<div class="col-sm-3">
+				<div class="card border-primary mb-3" style="max-width: 18rem;">
+						<div class="card-body text-dark">
+						<h5 class="card-title">Name: {{ op.name }}</h5>
+						<p class="card-text"> Artist:{{ op.opartist }}</a></p>
+						</div>
+				</div>
 			</div>
+			{% endfor %}
 		</div>
-		{% endfor %}
 		<h2 class="pt-3">Endings</h2>
 		<hr>
+		<div class="row">
 		{% for ed in data.endings %}
 		<div class="col-sm-3">
 			<div class="card border-primary mb-3" style="max-width: 18rem;">
@@ -92,6 +102,7 @@
 			</div>
 		</div>
 		{% endfor %}
+		</div>
 	</div>
 </div>
 

@@ -358,6 +358,6 @@ def insertData(request):
         if res.status_code != 204:
             return render(request, 'insert.html', {'error': "Could not create a new Anime"})
         
-        return render(request, 'insert.html')
+        return render(request, 'insert.html', {'success': "Anime created successfully"})
     else:
         return render(request, 'insert.html')
