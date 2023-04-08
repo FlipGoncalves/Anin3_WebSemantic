@@ -74,8 +74,6 @@ def homePage(request):
 
     data = {"animes": []}
 
-    print(res)
-
     for a in res['results']['bindings']:
         data["animes"].append({"Title": a['title']['value'], "Rank": a['rk']['value']})
 
@@ -274,7 +272,6 @@ def getGenres(request):
     for a in res['results']['bindings']:
         data["genres"].append(a["genres"]["value"])
 
-    print(data)
     return render(request, "allgenre.html", {'data': data})
 
 
