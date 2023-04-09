@@ -1,18 +1,19 @@
-<p>{{ data.Name }}</p>
-<p>Characters:</p>
-<table>
-	<tr>
-	  <th>Name</th>
-	  <th>Role</th>
-	  <th>Anime</th>
-	</tr>
-	{% for character in data.Characters %}
-		<tr>
-			<td>{{ character.Name }}</td>
-			<td>{{ character.Role }}</td>
-			<td><a href="{% url 'animeByName' title=character.Anime %}">{{ character.Anime }}</a></td>
-		</tr>
-	{% endfor %}
-</table> 
+{% extends 'base.html' %}
 
-<a href="http://127.0.0.1:8000/anime/random">Random</a>
+{% block content %}
+<br>
+<h1>VA: {{ data.Name }}</h1>
+<div class="row">
+	{% for character in data.Characters %}
+		<div class="col-sm-3">
+			<div class="card border-primary mb-3" style="max-width: 18rem;">
+					<div class="card-header">Role: {{ character.Role }}</div>
+					<div class="card-body text-dark">
+					<h5 class="card-title">Name: {{ character.Name }}</h5>
+					<p class="card-text"><a href="{% url 'animeTitle' title=character.Anime %}">{{ character.Anime }}</a></p>
+					</div>
+			</div>
+		</div>
+	{% endfor %}
+
+{% endblock %}

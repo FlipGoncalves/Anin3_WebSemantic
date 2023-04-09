@@ -1,20 +1,230 @@
+{% extends 'base.html' %}
 {% load static %}
 
-<p>{{ data.Name }}</p>
-<p>Characters:</p>
-<table>
-	<tr>
-	  <th>Name</th>
-	  <th>Role</th>
-	  <th>Voice Actor</th>
-	</tr>
-	{% for character in data.Characters %}
-		<tr>
-			<td>{{ character.Name }}</td>
-			<td>{{ character.Role }}</td>
-			<td><a href="{% url 'voiceActorByName' nome=character.VoiceActor %}">{{ character.VoiceActor }}</a></td>
-		</tr>
-	{% endfor %}
-</table> 
+{% block title %}Anime{% endblock %}
 
-<a href="http://127.0.0.1:8000/anime/random">Random</a>
+{% block content %}
+
+<button id="btn" class="btn btn-primary" style="float: right; position: relative; top: 25px; right: 10px;">Download Anime Info</button>
+<h1 class="pt-3">{{ data.title }}</h1>
+
+
+<ul class="nav nav-tabs pt-3" role="tablist">
+	<li class="nav-item">
+	  <a class="nav-link active" data-toggle="tab" href="#home" role="tab">Details</a>
+	</li>
+	<li class="nav-item">
+	  <a class="nav-link" data-toggle="tab" href="#characters" role="tab">Characters and Voice Actors</a>
+	</li>
+	<li class="nav-item">
+	  <a class="nav-link" data-toggle="tab" href="#openings" role="tab">Openings and Endings</a>
+	</li>
+  </ul>
+  
+  <div class="tab-content">
+	<div id="home" class="tab-pane fade show active p pt-3" role="tabpanel">
+		<div class="card">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-4 d-flex justify-content-center">
+					  	Score: 
+					  	<p class="card-text"> {{ data.score }}</p>
+					</div>
+					<div class="col-md-4 d-flex justify-content-center">
+						Rank: 
+						<p class="card-text">{{ data.rank }}</p>
+					</div>
+					<div class="col-md-4 d-flex justify-content-center">
+						Number of Raters: 
+						<p class="card-text">{{ data.num_members }}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<section>
+			<h2 class="pt-3">Genres</h2>
+			<hr>
+			<div class="row">
+			{% for g in data.genre %}
+				<div class="col-md-auto">
+					<h4><a href="{% url 'genreTitle' genre=g %}" class="badge badge-dark" >{{ g }}</a></h4>
+				</div>
+			{% endfor %}
+			</div>
+		</section>
+		<section>
+			<h2 class="pt-3">Studios</h2>
+			<hr>
+			<h4><a href="#" class="badge badge-dark">{{ data.made_by }}</a></h4>
+		</section>
+		<section>
+			<h2 class="pt-3">Themes</h2>
+			<hr>
+			<div class="row">
+			{% for g in data.theme %}
+				<div class="col-md-auto">
+					<h4><a href="{% url 'genreTitle' genre=g %}" class="badge badge-dark" >{{ g }}</a></h4>
+				</div>
+			{% endfor %}
+			</div>
+		</section>
+		<section>
+			<h2 class="pt-3">Other Information</h2>
+			<hr>
+			<div class="row">
+				<div class="card w-50">
+					<div class="card-body">
+					  <h5 class="card-title">Type</h5>
+					  <p class="card-text">{{ data.type }}</p>
+					</div>
+				</div>
+				<div class="card w-50">
+					<div class="card-body">
+					  <h5 class="card-title">Number of Episodes</h5>
+					  <p class="card-text">{{ data.num_episodes }}</p>
+					</div>
+				</div>
+				<div class="card w-50">
+					<div class="card-body">
+					  <h5 class="card-title">Duration</h5>
+					  <p class="card-text">{{ data.duration }}</p>
+					</div>
+				</div>
+				<div class="card w-50">
+					<div class="card-body">
+					  <h5 class="card-title">Source</h5>
+					  <p class="card-text">{{ data.source }}</p>
+					</div>
+				</div>
+				<div class="card w-50">
+					<div class="card-body">
+					  <h5 class="card-title">Aired Date</h5>
+					  <p class="card-text">{{ data.aired_date }}</p>
+					</div>
+				</div>
+				<div class="card w-50">
+					<div class="card-body">
+					  <h5 class="card-title">Status</h5>
+					  <p class="card-text">{{ data.status }}</p>
+					</div>
+				</div>
+				<div class="card w-50">
+					<div class="card-body">
+					  <h5 class="card-title">Age Rating</h5>
+					  <p class="card-text">{{ data.age_rating }}</p>
+					</div>
+				</div>
+				<div class="card w-50">
+					<div class="card-body">
+					  <h5 class="card-title">Demographic</h5>
+					  <p class="card-text">{{ data.demographic }}</p>
+					</div>
+				</div>
+				<div class="card w-50">
+					<div class="card-body">
+					  <h5 class="card-title">Adapted From</h5>
+					  <p class="card-text">{{ data.adapted_from }}</p>
+					</div>
+				</div>
+				<div class="card w-50">
+					<div class="card-body">
+					  <h5 class="card-title">Premiered</h5>
+					  <p class="card-text">{{ data.premiered }}</p>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<div id="characters" class="tab-pane fade" role="tabpanel">
+	</br>
+			<div class="row">
+			{% for character in data.characters %}
+				<div class="col-sm-3">
+					<div class="card border-primary mb-3" style="max-width: 18rem;">
+							<div class="card-header">Role: {{ character.role }}</div>
+							<div class="card-body text-dark">
+							<h5 class="card-title">Name: {{ character.name }}</h5>
+							<p class="card-text"><a href="{% url 'voiceActor' nome=character.voiceactor %}">Voice Actor:{{ character.voiceactor }}</a></p>
+							</div>
+					</div>
+				</div>
+			{% endfor %}
+			</div>
+	</div>
+	<div id="openings" class="tab-pane fade" role="tabpanel">
+		<h2 class="pt-3">Openings</h2>
+		<hr>
+		<div class="row">
+			{% for op in data.openings %}
+			<div class="col-sm-3">
+				<div class="card border-primary mb-3" style="max-width: 18rem;">
+						<div class="card-body text-dark">
+						<h5 class="card-title">Name: {{ op.name }}</h5>
+						<p class="card-text"> Artist:{{ op.opartist }}</a></p>
+						</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		<h2 class="pt-3">Endings</h2>
+		<hr>
+		<div class="row">
+		{% for ed in data.endings %}
+		<div class="col-sm-3">
+			<div class="card border-primary mb-3" style="max-width: 18rem;">
+					<div class="card-body text-dark">
+					<h5 class="card-title">Name: {{ ed.name }}</h5>
+					<p class="card-text"> Artist:{{ ed.endartist }}</a></p>
+					</div>
+			</div>
+		</div>
+		{% endfor %}
+		</div>
+	</div>
+</div>
+
+<script>
+	// Add an event listener to each navbar link
+	document.querySelectorAll('.nav-link').forEach(function(link) {
+	  link.addEventListener('click', function(event) {
+		event.preventDefault();
+		// Remove active class from all navbar links
+		document.querySelectorAll('.nav-link').forEach(function(link) {
+		  link.classList.remove('active');
+		});
+		// Add active class to clicked navbar link
+		this.classList.add('active');
+		// Hide all tab panes
+		document.querySelectorAll('.tab-pane').forEach(function(tab) {
+		  tab.classList.remove('show', 'active');
+		});
+		// Show the corresponding tab pane
+		document.querySelector(this.getAttribute('href')).classList.add('show', 'active');
+	  });
+	});
+	function download() {
+		var data = "{{data}}";
+		var title= "{{data.title}}"
+		var data =  data.replaceAll("&#x27;", "'")
+		data = data.replaceAll("&quot;", "\"")
+		const filename = title+'.json';
+		const jsonStr = JSON.stringify(data);
+	
+		let element = document.createElement('a');
+		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonStr));
+		element.setAttribute('download', filename);
+	
+		element.style.display = 'none';
+		document.body.appendChild(element);
+	
+		element.click();
+	
+		document.body.removeChild(element);
+	}
+	let btn = document.getElementById("btn");
+	btn.addEventListener('click', event => {
+	download();
+	});
+</script>
+
+{% endblock %}

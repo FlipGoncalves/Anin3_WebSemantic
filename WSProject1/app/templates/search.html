@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br>
+<h1>Searched for: {{text}}</h1>
+<br>
+<h2>Animes:</h2>
+<hr>
+<div class="row">
+	{% for anime in data.animes %}
+		<div class="col-sm-3">
+			<div class="card border-primary mb-3" style="max-width: 18rem;">
+					<div class="card-body text-dark">
+					<h5 class="card-title">Name: <a href="{% url 'animeTitle' title=anime.Title %}">{{ anime.Title }}</a></h5>
+					</div>
+			</div>
+		</div>
+	{% endfor %}
+</div>
+<br>
+<h2>Characters:</h2>
+<hr>
+<div class="row">
+	{% for character in data.characters %}
+		<div class="col-sm-3">
+			<div class="card border-primary mb-3" style="max-width: 18rem;">
+					<div class="card-body text-dark">
+					<h5 class="card-title">Name: {{ character.Character }}</h5>
+                    <p class="card-text">Anime: <a href="{% url 'animeTitle' title=character.Title %}">{{ character.Title }}</a></p>	
+                </div>
+			</div>
+		</div>
+	{% endfor %}
+</div>
+<br>
+<h2>Voice Actors:</h2>
+<hr>
+<div class="row">
+	{% for va in data.voiceactors %}
+		<div class="col-sm-3">
+			<div class="card border-primary mb-3" style="max-width: 18rem;">
+					<div class="card-body text-dark">
+					<h5 class="card-title">Name: {{ va.VoiceActor }}</h5>
+                    <p class="card-text">Anime: <a href="{% url 'animeTitle' title=va.Title %}">{{ va.Title }}</a></p>	
+                </div>
+			</div>
+		</div>
+	{% endfor %}
+</div>
+
+
+{% endblock %}

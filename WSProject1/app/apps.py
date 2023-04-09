@@ -33,7 +33,7 @@ class AppConfig(AppConfig):
 
             repo_config_dir = os.path.join(main_dir + os.sep, "anin3-config.ttl")
 
-            data_dir = os.path.join(main_dir + os.sep, "animes.nt")
+            data_dir = os.path.join(main_dir + os.sep, "animes.n3")
             
             with open(repo_config_dir, 'r', encoding='utf-8') as file:
                 data = file.readlines()

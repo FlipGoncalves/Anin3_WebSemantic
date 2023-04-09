@@ -18,9 +18,14 @@ from django.urls import path
 from app import views
 
 urlpatterns = [
+    path('', views.homePage),
     path('',views.homePage),
     path('admin/', admin.site.urls),
-    path('anime/random/', views.randomAnime),
-    path('anime/<str:title>/', views.animeTitle, name="animeByName"),
-    path('voiceactor/<str:nome>/', views.voiceActor, name="voiceActorByName"),
+    path('anime/random/', views.randomAnime, name="randomAnime"),
+    path('anime/<str:title>/', views.animeTitle, name="animeTitle"),
+    path('voiceactor/<str:nome>/', views.voiceActor, name="voiceActor"),
+    path('genre/<str:genre>/', views.animeByGenre, name="genreTitle"),
+    path('search/', views.searchByName, name="searchByName"),
+    path('allgenres/', views.getGenres, name="getGenres"),
+    path('insert/', views.insertData, name="insertData"),
 ]

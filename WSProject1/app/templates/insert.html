@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Add Anime</h2>
+  <form method="post" action="{% url 'insertData' %}">
+    {% csrf_token %}
+    <div class="row mb-3">
+      <div class="col-sm-4">
+        <label for="id_title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="id_title" name="title">
+      </div>
+      <div class="col-sm-4">
+        <label for="id_genre" class="form-label">Genre</label>
+        <input type="text" class="form-control" id="id_genre" name="genre">
+      </div>
+      <div class="col-sm-4">
+        <label for="id_score" class="form-label">Score</label>
+        <input type="text" class="form-control" id="id_score" name="score">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Anime</button>
+
+  </form>
+  {% if error %}
+    <div class="alert alert-danger mt-3" role="alert">
+      Error: {{ error }}
+    </div>
+  {% elif success %}
+    <div class="alert alert-success mt-3" role="alert">
+      Success: {{ success }}
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}
