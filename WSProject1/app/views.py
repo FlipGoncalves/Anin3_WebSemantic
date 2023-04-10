@@ -340,9 +340,6 @@ def insertData(request):
 
         res = requests.post(endpoint+f"/repositories/{repo_name}/statements", params=payload_query, headers={"Content-Type": "application/rdf+xml", 'Accept': 'application/json'})
 
-        print(res.content)
-        print(res.status_code)
-
         if res.status_code != 204:
             return render(request, 'insert.html', {'error': "Could not create a new Anime"})
         
