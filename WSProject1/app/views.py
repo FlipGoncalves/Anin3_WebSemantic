@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rdflib import Graph
 import json
 from s4api.graphdb_api import GraphDBApi
@@ -162,30 +162,10 @@ def randomAnime(request):
     query = f"""
         PREFIX ent: <http://anin3/ent/>
         PREFIX pred: <http://anin3/pred/>
-        SELECT *
+        SELECT ?title
         WHERE {{
-            {{
-                ?anime pred:rank "{rank}" .
-                ?anime ?pred ?object .
-                FILTER (isliteral(?object))
-            }}
-            UNION
-            {{
-                ?anime pred:rank "{rank}" .
-                ?anime ?pred ?object .
-                ?object pred:name ?charname .
-                ?object pred:role ?charrole .
-                ?vc pred:played ?object .
-                ?vc pred:name ?vcname .
-            }}
-            UNION
-            {{
-                ?anime pred:rank "{rank}" .
-                ?anime ?pred ?object .
-                ?object pred:name ?opname .
-                ?object pred:played_by ?op .
-                ?op pred:name ?opa .
-            }}
+            ?anime pred:rank "{rank}" .
+            ?anime pred:title ?title .
         }}
     """
     payload_query = {"query": query}
@@ -193,9 +173,7 @@ def randomAnime(request):
 
     res = json.loads(res)
 
-    data = refactorData(res)
-
-    return render(request, "anime.html", {'data': data})
+    return redirect(f'/anime/{res["results"]["bindings"][0]["title"]["value"]}/')
 
 
 def searchByName(request):
@@ -317,8 +295,18 @@ def insertData(request):
     if request.method == 'POST':
         # Get the form data
         title = request.POST.get('title')
+
+        if title == "":
+            return render(request, 'insert.html', {'error': "Could not create a new Anime"})
+
         genre = request.POST.get('genre')
         score = request.POST.get('score')
+        eps = request.POST.get('numeps')
+        rank = request.POST.get('rank')
+        status = request.POST.get('status')
+        duration = request.POST.get('duration')
+        studio = request.POST.get('studio')
+        demographic = request.POST.get('demo')
 
         identification = re.sub("[^\d\w\'°.]", "", title)
 
@@ -328,29 +316,32 @@ def insertData(request):
             INSERT DATA
             {{
                 ent:{identification} pred:title "{title}" ;
-                    pred:rank "1000000000" ;
+                    pred:rank "{rank}" ;
                     pred:website "" ;
                     pred:score "{score}" ;
                     pred:type "" ;
-                    pred:num_episodes "" ;
+                    pred:num_episodes "{eps}" ;
                     pred:source "" ;
-                    pred:status "" ;
+                    pred:status "{status}" ;
                     pred:aired_date "" ;
                     pred:age_rating "" ;
                     pred:popularity "" ;
                     pred:num_members "" ;
-                    pred:made_by "" ;
-                    pred:duration "" ;
+                    pred:made_by "{studio}" ;
+                    pred:duration "{duration}" ;
                     pred:premiered "" ;
-                    pred:demographic "" ;
+                    pred:demographic "{demographic}" ;
                     pred:genre "{genre}" ;
-                    pred:adaptated_from "" ;
+                    pred:adaptated_from "" .
             }}
         """
 
         payload_query = {"update": query, "baseURI": "http://anin3/"}
 
         res = requests.post(endpoint+f"/repositories/{repo_name}/statements", params=payload_query, headers={"Content-Type": "application/rdf+xml", 'Accept': 'application/json'})
+
+        print(res.content)
+        print(res.status_code)
 
         if res.status_code != 204:
             return render(request, 'insert.html', {'error': "Could not create a new Anime"})

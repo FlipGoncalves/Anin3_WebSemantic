@@ -1,2 +1,12 @@
 /*Now the CSS*/
 * {margin: 0; padding: 0;}
+
+
+.transparentButton {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+}

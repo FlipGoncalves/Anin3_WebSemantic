@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
-
-{% block title %}Anime{% endblock %}
+{% load bootstrap4 %}
 
 {% block content %}
+<head>
+	<title>AniN3</title>
+	{% bootstrap_css %}
+	{% bootstrap_javascript %}
+<head>
 
 <button id="btn" class="btn btn-primary" style="float: right; position: relative; top: 25px; right: 10px;">Download Anime Info</button>
 <h1 class="pt-3">{{ data.title }}</h1>
@@ -46,9 +50,11 @@
 			<hr>
 			<div class="row">
 			{% for g in data.genre %}
-				<div class="col-md-auto">
-					<h4><a href="{% url 'genreTitle' genre=g %}" class="badge badge-dark" >{{ g }}</a></h4>
-				</div>
+				{% if g != '' %}
+					<div class="col-md-auto">
+						<h4><a href="{% url 'genreTitle' genre=g %}" class="badge badge-dark" >{{ g }}</a></h4>
+					</div>
+				{% endif %}
 			{% endfor %}
 			</div>
 		</section>
