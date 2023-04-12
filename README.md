@@ -32,6 +32,18 @@ A pasta "WSProject1" contém o project DJango.
 
 Os ficheiros "dataset.n3" e "anin3-config.ttl" sáo ficheiros usados pelo projeto DJango e corresnpodem aos dados utilizados em formato N3 e ao ficheiro de configuração do RDF4J para um repositório de GraphDB, respetivamente.
 
+## Como Correr
+
+Iniciar o GraphDB no seu computador em http://localhost:7200/ e certificar-se que não tem um repositório chamado "anin3" inicialmente. 
+
+Para iniciar a aplicação django, basta executar os seguintes comandos:
+
+        cd path/to/project/folder/
+        cd WSProject1/
+        pip install -r requirements.txt
+        python3 manage.py runserver
+        
+
 ## Participantes
 - Filipe Gonçalves, 98083, Mestrado em Robótica e Sistemas Inteligentes
 - Gonçalo Machado, 98359, Mestrado em Engenharia Informática
