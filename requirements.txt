@@ -1,0 +1,6 @@
+rdflib
+s4api
+django
+django-jquery
+bootstrap4
+pandas
