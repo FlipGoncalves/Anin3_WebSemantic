@@ -6,11 +6,10 @@ from s4api.swagger import ApiClient
 import random
 import requests
 import re
+from SPARQLWrapper import SPARQLWrapper, JSON
 
-endpoint = "http://localhost:7200"
-repo_name = "anin3"
-client = ApiClient(endpoint=endpoint)
-accessor = GraphDBApi(client)
+sparql = SPARQLWrapper("http://localhost:7200/repositories/Anin3_Ontology")
+sparql.setReturnFormat(JSON)
 pred = "http://anin3/pred/"
 
 
@@ -66,18 +65,20 @@ def homePage(request):
             FILTER ( xsd:integer(?rk) < xsd:integer("11") )
         }} LIMIT 10
     """
+
+    sparql.setQuery(query)
     
-    payload_query = {"query": query}
-    res = accessor.sparql_select(body=payload_query, repo_name=repo_name)
-
-    res = json.loads(res)
-
     data = {"animes": []}
 
-    for a in res['results']['bindings']:
-        data["animes"].append({"Title": a['title']['value'], "Rank": a['rk']['value']})
+    try:
+        ret = sparql.queryAndConvert()
 
-    data = sorted(data["animes"], key=lambda a: int(a["Rank"]))
+        for a in res['results']['bindings']:
+            data["animes"].append({"Title": a['title']['value'], "Rank": a['rk']['value']})
+
+        data = sorted(data["animes"], key=lambda a: int(a["Rank"]))
+    except Exception as e:
+        print(e)
 
     return render(request, "index.html", {'data': data})
 
