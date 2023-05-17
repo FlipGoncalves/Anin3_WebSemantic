@@ -1,0 +1,86 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ent: <http://anin3/ent/> .
+@prefix pred: <http://anin3/pred/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+ent:Anime rdf:type rdfs:Class ;
+    rdfs:subClassOf owl:Thing .
+
+ent:Source rdf:type rdfs:Class ;
+    rdfs:subClassOf owl:Thing .
+
+ent:Tv rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Anime .
+
+ent:Special rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Anime .
+        
+ent:Movie rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Anime .
+
+ent:OVA rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Anime .
+
+ent:Music rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Anime .
+
+ent:ONA rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Anime .
+
+ent:VisualNovel rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Source .
+        
+ent:Novel rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Source .
+
+ent:MixedMedia rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Source .
+
+ent:Manga rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Source ;
+        rdf:label "Manga" .
+
+ent:WebManga rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Source .
+
+ent:4KomaManga rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Source .
+
+ent:CardGame rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Source .
+
+ent:Other rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Source .
+
+ent:Original rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Source .
+
+ent:Music rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Source .
+
+ent:Book rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Source .
+
+ent:Game rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Source .
+    
+ent:LightNovel rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Source .
+
+ent:Radio rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Source .
+
+ent:WebNovel rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Source .
+
+ent:PictureBook rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Source .
+
+pred:title rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+    
+pred:source rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range ent:Source .
