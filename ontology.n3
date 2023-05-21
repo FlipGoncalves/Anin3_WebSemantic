@@ -1,38 +1,47 @@
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix ent: <http://anin3/ent/> .
 @prefix pred: <http://anin3/pred/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 
-
-ent:Person rdf:type rdfs:Class .
+ent:Person rdf:type rdfs:Class ;
+    rdfs:subClassOf owl:Thing ;
+    owl:disjointWith ent:Character, ent:Anime, ent:Music .
 
 ent:Singer rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Person ;
-        owl:disjointWith ent:VoiceActor .
+    rdfs:subClassOf ent:Person ;
+    owl:disjointWith ent:VoiceActor .
 
 ent:VoiceActor rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Person ;
-        owl:disjointWith ent:Singer .
+    rdfs:subClassOf ent:Person ;
+    owl:disjointWith ent:Singer .
 
-ent:Music rdf:type rdfs:Class .
+ent:Music rdf:type rdfs:Class ;
+    rdfs:subClassOf owl:Thing ;
+    owl:disjointWith ent:Person, ent:Anime, ent:Character .
 
 ent:Opening rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Music ;
-        owl:disjointWith ent:Ending .
+    rdfs:subClassOf ent:Music ;
+    owl:disjointWith ent:Ending .
 
 ent:Ending rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Music ;
-        owl:disjointWith ent:Opening .
+    rdfs:subClassOf ent:Music ;
+    owl:disjointWith ent:Opening .
 
-ent:Anime rdf:type rdfs:Class .
+ent:Anime rdf:type rdfs:Class ;
+    rdfs:subClassOf owl:Thing ;
+    owl:disjointWith ent:Person, ent:Character, ent:Music .
 
-ent:Character rdf:type rdfs:Class .
-
+ent:Character rdf:type rdfs:Class ;
+    rdfs:subClassOf owl:Thing ;
+    owl:disjointWith ent:Person, ent:Anime, ent:Music .
 
 
 pred:starring rdf:type rdf:Property ;
     rdfs:range ent:Character . 
+
+pred:played rdf:type rdf:Property ;
+    rdfs:range ent:Character .
 
 pred:opening rdf:type rdf:Property ;
     rdfs:range ent:Opening .
@@ -42,13 +51,9 @@ pred:ending rdf:type rdf:Property ;
 
 pred:voiced_at rdf:type rdf:Property ;
     rdfs:range ent:VoiceActor .
-
-pred:played rdf:type rdf:Property ;
-    rdfs:range ent:Character .
-
+ 
 pred:played_by rdf:type rdf:Property ;
     rdfs:range ent:Singer .
-
 
 
 pred:title rdf:type rdf:Property ;
