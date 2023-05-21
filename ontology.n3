@@ -4,83 +4,53 @@
 @prefix pred: <http://anin3/pred/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 
-ent:Anime rdf:type rdfs:Class ;
-    rdfs:subClassOf owl:Thing .
 
-ent:Source rdf:type rdfs:Class ;
-    rdfs:subClassOf owl:Thing .
+ent:Person rdf:type rdfs:Class .
 
-ent:Tv rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Anime .
+ent:Singer rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Person ;
+        owl:disjointWith ent:VoiceActor .
 
-ent:Special rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Anime .
-        
-ent:Movie rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Anime .
+ent:VoiceActor rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Person ;
+        owl:disjointWith ent:Singer .
 
-ent:OVA rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Anime .
+ent:Music rdf:type rdfs:Class .
 
-ent:Music rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Anime .
+ent:Opening rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Music ;
+        owl:disjointWith ent:Ending .
 
-ent:ONA rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Anime .
+ent:Ending rdf:type rdfs:Class ;
+        rdfs:subClassOf ent:Music ;
+        owl:disjointWith ent:Opening .
 
-ent:VisualNovel rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Source .
-        
-ent:Novel rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Source .
+ent:Anime rdf:type rdfs:Class .
 
-ent:MixedMedia rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Source .
+ent:Character rdf:type rdfs:Class .
 
-ent:Manga rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Source ;
-        rdf:label "Manga" .
 
-ent:WebManga rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Source .
 
-ent:4KomaManga rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Source .
+pred:starring rdf:type rdf:Property ;
+    rdfs:range ent:Character . 
 
-ent:CardGame rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Source .
+pred:opening rdf:type rdf:Property ;
+    rdfs:range ent:Opening .
 
-ent:Other rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Source .
+pred:ending rdf:type rdf:Property ;
+    rdfs:range ent:Ending .
 
-ent:Original rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Source .
+pred:voiced_at rdf:type rdf:Property ;
+    rdfs:range ent:VoiceActor .
 
-ent:Music rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Source .
+pred:played rdf:type rdf:Property ;
+    rdfs:range ent:Character .
 
-ent:Book rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Source .
+pred:played_by rdf:type rdf:Property ;
+    rdfs:range ent:Singer .
 
-ent:Game rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Source .
-    
-ent:LightNovel rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Source .
 
-ent:Radio rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Source .
-
-ent:WebNovel rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Source .
-
-ent:PictureBook rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Source .
 
 pred:title rdf:type rdf:Property ;
     rdfs:domain ent:Anime ;
     rdfs:range rdfs:Literal .
-    
-pred:source rdf:type rdf:Property ;
-    rdfs:domain ent:Anime ;
-    rdfs:range ent:Source .
