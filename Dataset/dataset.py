@@ -16,7 +16,7 @@ def loadCSV2NT():
     animes = pd.read_csv("animes.csv")
     triples = []
 
-    for _, rank, title, link, score, type, episodes, source, status, premiered, aired_date, studios, genres, themes, demographic, duration, age_rating, _, popularity, members, _, adaptation, sequel, prequel, characters, role, voice_actors, ops, ops_artist, ends, ends_artist in animes.values[:10]:
+    for _, rank, title, link, score, type, episodes, source, status, premiered, aired_date, studios, genres, themes, demographic, duration, age_rating, _, popularity, members, _, adaptation, sequel, prequel, characters, role, voice_actors, ops, ops_artist, ends, ends_artist in animes.values[:1000]:
 
         title = removeTitle(title)
         anime_ID = removeID(title)
