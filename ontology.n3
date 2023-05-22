@@ -56,6 +56,99 @@ pred:played_by rdf:type rdf:Property ;
     rdfs:range ent:Singer .
 
 
+pred:sequel rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range ent:Anime .
+
+pred:sing_name rdf:type rdf:Property ;
+    rdfs:domain ent:Singer ;
+    rdfs:range rdfs:Literal .
+
+pred:char_name rdf:type rdf:Property ;
+    rdfs:domain ent:Character ;
+    rdfs:range rdfs:Literal .
+
+pred:va_name rdf:type rdf:Property ;
+    rdfs:domain ent:VoiceActor ;
+    rdfs:range rdfs:Literal .
+
+pred:op_name rdf:type rdf:Property ;
+    rdfs:domain ent:Opening ;
+    rdfs:range rdfs:Literal .
+
+pred:end_name rdf:type rdf:Property ;
+    rdfs:domain ent:Ending ;
+    rdfs:range rdfs:Literal .
+
+pred:role rdf:type rdf:Property ;
+    rdfs:domain ent:Character ;
+    rdfs:range rdfs:Literal .
+
+
 pred:title rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:adapted_from rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:age_rating rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:aired_date rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:genre rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:made_by rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:num_episodes rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:num_members rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:popularity rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:premired rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:score rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:rank rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:source rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:status rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:theme rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:type rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:website rdf:type rdf:Property ;
     rdfs:domain ent:Anime ;
     rdfs:range rdfs:Literal .
