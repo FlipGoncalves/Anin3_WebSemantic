@@ -3,6 +3,7 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 ent:Person rdf:type rdfs:Class ;
     rdfs:subClassOf owl:Thing ;
@@ -38,27 +39,45 @@ ent:Character rdf:type rdfs:Class ;
 
 
 pred:starring rdf:type rdf:Property ;
+    owl:inverseOf pred:starred_at ;
+    rdfs:domain ent:Anime ;
     rdfs:range ent:Character . 
 
 pred:played rdf:type rdf:Property ;
+    owl:inverseOf pred:voiced_by ;
+    rdfs:domain ent:VoiceActor ;
     rdfs:range ent:Character .
 
 pred:opening rdf:type rdf:Property ;
+    owl:inverseOf pred:op_played_in ;
+    rdfs:domain ent:Anime ;
     rdfs:range ent:Opening .
 
 pred:ending rdf:type rdf:Property ;
+    owl:inverseOf pred:end_played_in ;
+    rdfs:domain ent:Anime ;
     rdfs:range ent:Ending .
 
 pred:voiced_at rdf:type rdf:Property ;
+    owl:inverseOf pred:voiced_in ;
+    rdfs:domain ent:Anime ;
     rdfs:range ent:VoiceActor .
  
 pred:played_by rdf:type rdf:Property ;
+    owl:inverseOf pred:sang ;
+    rdfs:domain ent:Music ;
     rdfs:range ent:Singer .
 
-
 pred:sequel rdf:type rdf:Property ;
+    owl:inverseOf pred:prequel ;
     rdfs:domain ent:Anime ;
     rdfs:range ent:Anime .
+    
+pred:prequel rdf:type rdf:Property ;
+    owl:inverseOf pred:sequel ;
+    rdfs:domain ent:Anime ;
+    rdfs:range ent:Anime .
+
 
 pred:sing_name rdf:type rdf:Property ;
     rdfs:domain ent:Singer ;
@@ -83,7 +102,6 @@ pred:end_name rdf:type rdf:Property ;
 pred:role rdf:type rdf:Property ;
     rdfs:domain ent:Character ;
     rdfs:range rdfs:Literal .
-
 
 pred:title rdf:type rdf:Property ;
     rdfs:domain ent:Anime ;

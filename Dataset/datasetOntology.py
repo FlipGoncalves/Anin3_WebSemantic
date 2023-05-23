@@ -23,7 +23,7 @@ def removeID(var):
 openings = []
 endings = []
 
-for _, rank, title, link, score, type, episodes, source, status, premiered, aired_date, studios, genres, themes, demographic, duration, age_rating, _, popularity, members, _, adaptation, sequel, prequel, characters, role, voice_actors, ops, ops_artist, ends, ends_artist in animes.values[:1000]:
+for _, rank, title, link, score, type, episodes, source, status, premiered, aired_date, studios, genres, themes, demographic, duration, age_rating, _, popularity, members, _, adaptation, sequel, prequel, characters, role, voice_actors, ops, ops_artist, ends, ends_artist in animes.values[:10000]:
 
     print(int(rank))
 
@@ -84,7 +84,7 @@ for _, rank, title, link, score, type, episodes, source, status, premiered, aire
         sequel_ID = removeID(removeTitle(sequel))
 
         found = False
-        for s,p,o in g.triples((None, pred.title, sequel)):
+        for s,p,o in g.triples((None, pred.title, Literal(sequel))):
             sequel_ID = str(s)
             found = True
 
@@ -102,14 +102,16 @@ for _, rank, title, link, score, type, episodes, source, status, premiered, aire
                 if count == 1:
                     same = True
                     sequel_ID += "0"
-        
-        g.add((anime_ID, pred.sequel, URIRef("http://anin3/ent/"+sequel_ID)))
-        g.add((URIRef("http://anin3/ent/"+sequel_ID), pred.title, Literal(sequel)))
+
+            sequel_ID = "http://anin3/ent/"+sequel_ID
+    
+        g.add((anime_ID, pred.sequel, URIRef(sequel_ID)))
+        g.add((URIRef(sequel_ID), pred.title, Literal(sequel)))
     if pd.notna(prequel):
         prequel_ID = removeID(removeTitle(prequel))
 
         found = False
-        for s,p,o in g.triples((None, pred.title, prequel)):
+        for s,p,o in g.triples((None, pred.title, Literal(prequel))):
             prequel_ID = str(s)
             found = True
 
@@ -127,9 +129,11 @@ for _, rank, title, link, score, type, episodes, source, status, premiered, aire
                 if count == 1:
                     same = True
                     prequel_ID += "0"
+
+            prequel_ID = "http://anin3/ent/"+prequel_ID
                     
-        g.add((anime_ID, pred.prequel, URIRef("http://anin3/ent/"+prequel_ID)))
-        g.add((URIRef("http://anin3/ent/"+prequel_ID), pred.title, Literal(prequel)))
+        g.add((anime_ID, pred.prequel, URIRef(prequel_ID)))
+        g.add((URIRef(prequel_ID), pred.title, Literal(prequel)))
 
 
     characters = [char for char in characters.strip('][').split('\'') if char != "" and char != ", "]
