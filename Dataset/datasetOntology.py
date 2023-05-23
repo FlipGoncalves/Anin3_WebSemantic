@@ -172,7 +172,7 @@ for _, rank, title, link, score, type, episodes, source, status, premiered, aire
                 count = 0
                 for s,p,o in g.triples((URIRef("http://anin3/ent/"+vc), None, None)):
                     count += 1
-                    if p == pred.role or p == pred.played_by or p == pred.title:
+                    if p == pred.role or p == pred.played_by or p == pred.title or p == pred.char_name:
                         same = True
                         vc += "0"
                         break
