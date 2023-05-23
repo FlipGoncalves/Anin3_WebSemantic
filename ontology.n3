@@ -1,56 +1,172 @@
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix ent: <http://anin3/ent/> .
 @prefix pred: <http://anin3/pred/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-
-ent:Person rdf:type rdfs:Class .
+ent:Person rdf:type rdfs:Class ;
+    rdfs:subClassOf owl:Thing ;
+    owl:disjointWith ent:Character, ent:Anime, ent:Music .
 
 ent:Singer rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Person ;
-        owl:disjointWith ent:VoiceActor .
+    rdfs:subClassOf ent:Person ;
+    owl:disjointWith ent:VoiceActor .
 
 ent:VoiceActor rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Person ;
-        owl:disjointWith ent:Singer .
+    rdfs:subClassOf ent:Person ;
+    owl:disjointWith ent:Singer .
 
-ent:Music rdf:type rdfs:Class .
+ent:Music rdf:type rdfs:Class ;
+    rdfs:subClassOf owl:Thing ;
+    owl:disjointWith ent:Person, ent:Anime, ent:Character .
 
 ent:Opening rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Music ;
-        owl:disjointWith ent:Ending .
+    rdfs:subClassOf ent:Music ;
+    owl:disjointWith ent:Ending .
 
 ent:Ending rdf:type rdfs:Class ;
-        rdfs:subClassOf ent:Music ;
-        owl:disjointWith ent:Opening .
+    rdfs:subClassOf ent:Music ;
+    owl:disjointWith ent:Opening .
 
-ent:Anime rdf:type rdfs:Class .
+ent:Anime rdf:type rdfs:Class ;
+    rdfs:subClassOf owl:Thing ;
+    owl:disjointWith ent:Person, ent:Character, ent:Music .
 
-ent:Character rdf:type rdfs:Class .
-
+ent:Character rdf:type rdfs:Class ;
+    rdfs:subClassOf owl:Thing ;
+    owl:disjointWith ent:Person, ent:Anime, ent:Music .
 
 
 pred:starring rdf:type rdf:Property ;
+    owl:inverseOf pred:starred_at ;
+    rdfs:domain ent:Anime ;
     rdfs:range ent:Character . 
 
+pred:played rdf:type rdf:Property ;
+    owl:inverseOf pred:voiced_by ;
+    rdfs:domain ent:VoiceActor ;
+    rdfs:range ent:Character .
+
 pred:opening rdf:type rdf:Property ;
+    owl:inverseOf pred:op_played_in ;
+    rdfs:domain ent:Anime ;
     rdfs:range ent:Opening .
 
 pred:ending rdf:type rdf:Property ;
+    owl:inverseOf pred:end_played_in ;
+    rdfs:domain ent:Anime ;
     rdfs:range ent:Ending .
 
 pred:voiced_at rdf:type rdf:Property ;
+    owl:inverseOf pred:voiced_in ;
+    rdfs:domain ent:Anime ;
     rdfs:range ent:VoiceActor .
-
-pred:played rdf:type rdf:Property ;
-    rdfs:range ent:Character .
-
+ 
 pred:played_by rdf:type rdf:Property ;
+    owl:inverseOf pred:sang ;
+    rdfs:domain ent:Music ;
     rdfs:range ent:Singer .
 
+pred:sequel rdf:type rdf:Property ;
+    owl:inverseOf pred:prequel ;
+    rdfs:domain ent:Anime ;
+    rdfs:range ent:Anime .
+    
+pred:prequel rdf:type rdf:Property ;
+    owl:inverseOf pred:sequel ;
+    rdfs:domain ent:Anime ;
+    rdfs:range ent:Anime .
 
+
+pred:sing_name rdf:type rdf:Property ;
+    rdfs:domain ent:Singer ;
+    rdfs:range rdfs:Literal .
+
+pred:char_name rdf:type rdf:Property ;
+    rdfs:domain ent:Character ;
+    rdfs:range rdfs:Literal .
+
+pred:va_name rdf:type rdf:Property ;
+    rdfs:domain ent:VoiceActor ;
+    rdfs:range rdfs:Literal .
+
+pred:op_name rdf:type rdf:Property ;
+    rdfs:domain ent:Opening ;
+    rdfs:range rdfs:Literal .
+
+pred:end_name rdf:type rdf:Property ;
+    rdfs:domain ent:Ending ;
+    rdfs:range rdfs:Literal .
+
+pred:role rdf:type rdf:Property ;
+    rdfs:domain ent:Character ;
+    rdfs:range rdfs:Literal .
 
 pred:title rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:adapted_from rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:age_rating rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:aired_date rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:genre rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:made_by rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:num_episodes rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:num_members rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:popularity rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:premired rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:score rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:rank rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:source rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:status rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:theme rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:type rdf:type rdf:Property ;
+    rdfs:domain ent:Anime ;
+    rdfs:range rdfs:Literal .
+
+pred:website rdf:type rdf:Property ;
     rdfs:domain ent:Anime ;
     rdfs:range rdfs:Literal .
