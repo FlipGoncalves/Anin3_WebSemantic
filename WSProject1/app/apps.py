@@ -4,13 +4,14 @@ from s4api.graphdb_api import GraphDBApi
 from s4api.swagger import ApiClient
 import requests
 import os
-import shutil
+from .utils import SPINInference
 
 endpoint = "http://localhost:7200"
 repo_name = "anin3"
 get_repositories = "/rest/repositories"
 client = ApiClient(endpoint=endpoint)
 accessor = GraphDBApi(client)   
+
 
 class AppConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
@@ -47,3 +48,6 @@ class AppConfig(AppConfig):
             with open(repo_config_dir, 'rb') as f: 
                 res = requests.post(endpoint + "/rest/repositories", files={'config':f})
                 print("Repository created and data inserted.")
+
+            SPINInference.main()
+            print("Inference applied to data.")
