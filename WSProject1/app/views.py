@@ -8,7 +8,7 @@ import requests
 import re
 from SPARQLWrapper import SPARQLWrapper, JSON
 
-sparql = SPARQLWrapper("http://localhost:7200/repositories/Anin3_Ontology")
+sparql = SPARQLWrapper("http://localhost:7200/repositories/anin3")
 sparql.setReturnFormat(JSON)
 pred = "http://anin3/pred/"
 
@@ -71,7 +71,7 @@ def homePage(request):
     data = {"animes": []}
 
     try:
-        ret = sparql.queryAndConvert()
+        res = sparql.queryAndConvert()
 
         for a in res['results']['bindings']:
             data["animes"].append({"Title": a['title']['value'], "Rank": a['rk']['value']})
@@ -90,27 +90,29 @@ def voiceActor(request, nome):
         PREFIX pred: <http://anin3/pred/>
         SELECT ?character_name ?role ?animename
         WHERE {{
-            ?voice_actor pred:name "{nome}".
+            ?voice_actor pred:va_name "{nome}".
             ?voice_actor pred:played ?character .
-            ?character pred:name ?character_name .
+            ?character pred:char_name ?character_name .
             ?character pred:role ?role .
             ?anime pred:starring ?character .
             ?anime pred:title ?animename .
         }}
     """
 
-    payload_query = {"query": query}
-    res = accessor.sparql_select(body=payload_query, repo_name=repo_name)
-    res = json.loads(res)
-
+    sparql.setQuery(query)
+    
     data = {"Name": nome}
 
-    for a in res['results']['bindings']:
-        if "Characters" in data.keys():
-            data["Characters"].append({"Name": a['character_name']['value'], "Role": a['role']['value'], "Anime": a['animename']['value']})    
-        else:
-            data["Characters"] = [{"Name": a['character_name']['value'], "Role": a['role']['value'], "Anime": a['animename']['value']}]
+    try:
+        res = sparql.queryAndConvert()
 
+        for a in res['results']['bindings']:
+            if "Characters" in data.keys():
+                data["Characters"].append({"Name": a['character_name']['value'], "Role": a['role']['value'], "Anime": a['animename']['value']})    
+            else:
+                data["Characters"] = [{"Name": a['character_name']['value'], "Role": a['role']['value'], "Anime": a['animename']['value']}]
+    except Exception as e:
+        print(e)
     return render(request, "voice.html", {'data': data})
 
 
@@ -130,28 +132,33 @@ def animeTitle(request, title):
             {{
                 ?anime pred:title "{title}" .
                 ?anime ?pred ?object .
-                ?object pred:name ?charname .
+                ?object pred:char_name ?charname .
                 ?object pred:role ?charrole .
                 ?vc pred:played ?object .
-                ?vc pred:name ?vcname .
+                ?vc pred:va_name ?vcname .
             }}
             UNION
             {{
                 ?anime pred:title "{title}" .
                 ?anime ?pred ?object .
-                ?object pred:name ?opname .
+                ?object pred:op_name ?opname .
                 ?object pred:played_by ?op .
-                ?op pred:name ?opa .
+                ?op pred:sing_name ?opa .
             }}
         }}
     """
     
-    payload_query = {"query": query}
-    res = accessor.sparql_select(body=payload_query, repo_name=repo_name)
+    sparql.setQuery(query)
 
-    res = json.loads(res)
+    try:
+
+        res = sparql.queryAndConvert()
+        
+    except Exception as e:
+        print(e)
 
     data = refactorData(res)
+    print(data)
 
     return render(request, "anime.html", {'data': data})
 
@@ -169,10 +176,14 @@ def randomAnime(request):
             ?anime pred:title ?title .
         }}
     """
-    payload_query = {"query": query}
-    res = accessor.sparql_select(body=payload_query, repo_name=repo_name)
+    sparql.setQuery(query)
 
-    res = json.loads(res)
+    try:
+
+        res = sparql.queryAndConvert()
+
+    except Exception as e:
+        print(e)
 
     return redirect(f'/anime/{res["results"]["bindings"][0]["title"]["value"]}/')
 
@@ -192,34 +203,38 @@ def searchByName(request):
             UNION
             {{
                 ?s pred:starring ?character .
-                ?character pred:name ?charname .
+                ?character pred:char_name ?charname .
                 ?s pred:title ?title .
                 FILTER (contains(?charname, "{text}"))        
             }}
             UNION
             {{
                 ?s pred:voiced_at ?vc .
-                ?vc pred:name ?vcname .
+                ?vc pred:va_name ?vcname .
                 ?s pred:title ?title .
                 FILTER (contains(?vcname, "{text}"))
             }}
         }}
     """
-    
-    payload_query = {"query": query}
-    res = accessor.sparql_select(body=payload_query, repo_name=repo_name)
-
-    res = json.loads(res)
 
     data = {"animes": [], "characters": [], "voiceactors": []}
 
-    for a in res['results']['bindings']:
-        if "charname" in a.keys():
-            data["characters"].append({"Title": a["title"]["value"], "Character": a["charname"]["value"]})
-        elif "vcname" in a.keys():
-            data["voiceactors"].append({"Title": a["title"]["value"], "VoiceActor": a["vcname"]["value"]})
-        else:
-            data["animes"].append({"Title": a["title"]["value"]})
+    sparql.setQuery(query)
+
+    try:
+
+        res = sparql.queryAndConvert()
+
+        for a in res['results']['bindings']:
+            if "charname" in a.keys():
+                data["characters"].append({"Title": a["title"]["value"], "Character": a["charname"]["value"]})
+            elif "vcname" in a.keys():
+                data["voiceactors"].append({"Title": a["title"]["value"], "VoiceActor": a["vcname"]["value"]})
+            else:
+                data["animes"].append({"Title": a["title"]["value"]})
+
+    except Exception as e:
+        print(e)
 
     return render(request, "search.html", {'data': data, 'text': text})
 
@@ -241,15 +256,19 @@ def getGenres(request):
         }}
     """
 
-    payload_query = {"query": query}
-    res = accessor.sparql_select(body=payload_query, repo_name=repo_name)
-
-    res = json.loads(res)
-
     data = {"genres": []}
 
-    for a in res['results']['bindings']:
-        data["genres"].append(a["genres"]["value"])
+    sparql.setQuery(query)
+
+    try:
+
+        res = sparql.queryAndConvert()
+
+        for a in res['results']['bindings']:
+            data["genres"].append(a["genres"]["value"])
+
+    except Exception as e:
+        print(e)
 
     return render(request, "allgenre.html", {'data': data})
 
@@ -278,15 +297,19 @@ def animeByGenre(request, genre):
         }} ORDER BY ASC(xsd:integer(?rank)) LIMIT 20
     """
 
-    payload_query = {"query": query}
-    res = accessor.sparql_select(body=payload_query, repo_name=repo_name)
-
-    res = json.loads(res)
-
     data = {"animes": []}
 
-    for a in res['results']['bindings']:
-        data["animes"].append({"Title": a['title']['value'], "Rank": a['rank']['value']})
+    sparql.setQuery(query)
+
+    try:
+
+        res = sparql.queryAndConvert()
+
+        for a in res['results']['bindings']:
+            data["animes"].append({"Title": a['title']['value'], "Rank": a['rank']['value']})
+
+    except Exception as e:
+        print(e)
     
     data = sorted(data["animes"], key=lambda a: int(a["Rank"]))
     return render(request, "genre.html", {'data': data, 'genre': genre})
@@ -339,7 +362,7 @@ def insertData(request):
 
         payload_query = {"update": query, "baseURI": "http://anin3/"}
 
-        res = requests.post(endpoint+f"/repositories/{repo_name}/statements", params=payload_query, headers={"Content-Type": "application/rdf+xml", 'Accept': 'application/json'})
+        res = requests.post("http://localhost:7200/repositories/anin3/statements", params=payload_query, headers={"Content-Type": "application/rdf+xml", 'Accept': 'application/json'})
 
         if res.status_code != 204:
             return render(request, 'insert.html', {'error': "Could not create a new Anime"})
