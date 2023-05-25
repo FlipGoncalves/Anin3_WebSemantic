@@ -28,7 +28,7 @@ class AppConfig(AppConfig):
         if(not repo_exists):
             file_dir = os.path.abspath(__file__)
             
-            dir_partition = file_dir.partition("WebSemanticaTrabalho1")
+            dir_partition = file_dir.partition("WebSemanticaProjeto")
 
             main_dir = dir_partition[0] + dir_partition[1]
 

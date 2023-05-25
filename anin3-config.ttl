@@ -39,7 +39,7 @@
             # Settable in the file but otherwise hidden in the UI and in the RDF4J console
             graphdb:base-URL "http://example.org/owlim#" ;
             graphdb:defaultNS "http://anin3/" ;
-            graphdb:imports "/home/filipino/Desktop/WebSemanticaTrabalho1/animes.n3" ;
+            graphdb:imports "C:\Users\Luz mobie Pedro\Source\Repos\WebSemanticaProjeto\animes.n3" ;
             graphdb:repository-type "file-repository" ;
             graphdb:storage-folder "storage" ;
             graphdb:entity-index-size "10000000" ;
