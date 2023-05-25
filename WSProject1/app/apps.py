@@ -48,3 +48,6 @@ class AppConfig(AppConfig):
             with open(repo_config_dir, 'rb') as f: 
                 res = requests.post(endpoint + "/rest/repositories", files={'config':f})
                 print("Repository created and data inserted.")
+
+            SPINInference.main()
+            print("Inference applied to data.")
