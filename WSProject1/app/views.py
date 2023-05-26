@@ -12,6 +12,7 @@ sparql = SPARQLWrapper("http://localhost:7200/repositories/anin3")
 sparql.setReturnFormat(JSON)
 pred = "http://anin3/pred/"
 
+NEW_ANIME_COUNT = 0
 
 def refactorData(res):
 
@@ -20,34 +21,35 @@ def refactorData(res):
 
     for a in res['results']['bindings']:
 
-        p = a["pred"]["value"].replace(pred, "")
+        if "pred" in a.keys():
+            p = a["pred"]["value"].replace(pred, "")
 
-        if p == "theme" or p == "genre":
-            data[p].append(a["object"]["value"])
-
-        elif p == "starring" and "charname" in a.keys():
-            data["characters"].append({"name": a['charname']['value'], "role": a['charrole']['value'], "voiceactor": a['vcname']['value']})
-            # if "characters" in data.keys():
-            #     data["characters"].append({"name": a['charname']['value'], "role": a['charrole']['value'], "voiceactor": a['vcname']['value']})    
-            # else:
-            #     data["characters"] = [{"name": a['charname']['value'], "role": a['charrole']['value'], "voiceactor": a['vcname']['value']}]
-
-        elif p == "opening" and "opname" in a.keys():
-            data["openings"].append({"name": a['opname']['value'], "opartist": a['opa']['value']}) 
-            # if "openings" in data.keys():
-            #     data["openings"].append({"name": a['opname']['value'], "opartist": a['opa']['value']})    
-            # else:
-            #     data["openings"] = [{"name": a['opname']['value'], "opartist": a['opa']['value']}]
-
-        elif p == "ending" and "opname" in a.keys():
-            data["endings"].append({"name": a['opname']['value'], "endartist": a['opa']['value']}) 
-            # if "endings" in data.keys():
-            #     data["endings"].append({"name": a['opname']['value'], "endartist": a['opa']['value']})    
-            # else:
-            #     data["endings"] = [{"name": a['opname']['value'], "endartist": a['opa']['value']}]
+            if p == "theme" or p == "genre":
+                data[p].append(a["object"]["value"])
+            else:
+                data[p] = a["object"]["value"]
 
         else:
-            data[p] = a["object"]["value"]
+            if "charname" in a.keys():
+                data["characters"].append({"name": a['charname']['value'], "role": a['charrole']['value'], "voiceactor": a['vcname']['value']})
+                # if "characters" in data.keys():
+                #     data["characters"].append({"name": a['charname']['value'], "role": a['charrole']['value'], "voiceactor": a['vcname']['value']})    
+                # else:
+                #     data["characters"] = [{"name": a['charname']['value'], "role": a['charrole']['value'], "voiceactor": a['vcname']['value']}]
+
+            elif "opname" in a.keys():
+                data["openings"].append({"name": a['opname']['value'], "opartist": a['opa']['value']}) 
+                # if "openings" in data.keys():
+                #     data["openings"].append({"name": a['opname']['value'], "opartist": a['opa']['value']})    
+                # else:
+                #     data["openings"] = [{"name": a['opname']['value'], "opartist": a['opa']['value']}]
+
+            elif "endname" in a.keys():
+                data["endings"].append({"name": a['endname']['value'], "endartist": a['enda']['value']}) 
+                # if "endings" in data.keys():
+                #     data["endings"].append({"name": a['opname']['value'], "endartist": a['opa']['value']})    
+                # else:
+                #     data["endings"] = [{"name": a['opname']['value'], "endartist": a['opa']['value']}]
 
     return data
 
@@ -58,12 +60,13 @@ def homePage(request):
         PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
         PREFIX pred:<http://anin3/pred/>
         PREFIX ent:<http://anin3/ent/>
-        SELECT ?title ?rk
+        SELECT DISTINCT ?title ?rk
         WHERE {{ 
+            ?anime a ent:Anime .
             ?anime pred:rank ?rk .
             ?anime pred:title ?title .
             FILTER ( xsd:integer(?rk) < xsd:integer("11") )
-        }} LIMIT 10
+        }}
     """
 
     sparql.setQuery(query)
@@ -72,6 +75,7 @@ def homePage(request):
 
     try:
         res = sparql.queryAndConvert()
+        print(res)
 
         for a in res['results']['bindings']:
             data["animes"].append({"Title": a['title']['value'], "Rank": a['rk']['value']})
@@ -88,15 +92,18 @@ def voiceActor(request, nome):
     query = f"""
         PREFIX ent: <http://anin3/ent/>
         PREFIX pred: <http://anin3/pred/>
-        SELECT ?character_name ?role ?animename
+        SELECT DISTINCT ?character_name ?role ?animename
         WHERE {{
             ?voice_actor pred:va_name "{nome}".
+            ?voice_actor a ent:VoiceActor .
             ?voice_actor pred:played ?character .
+            ?character a ent:Character .
             ?character pred:char_name ?character_name .
             ?character pred:role ?role .
-            ?anime pred:starring ?character .
+            ?character pred:starred_at ?anime.
+            ?anime a ent:Anime .
             ?anime pred:title ?animename .
-        }}
+        }} LIMIT 100
     """
 
     sparql.setQuery(query)
@@ -113,6 +120,7 @@ def voiceActor(request, nome):
                 data["Characters"] = [{"Name": a['character_name']['value'], "Role": a['role']['value'], "Anime": a['animename']['value']}]
     except Exception as e:
         print(e)
+
     return render(request, "voice.html", {'data': data})
 
 
@@ -130,20 +138,37 @@ def animeTitle(request, title):
             }}
             UNION
             {{
+                ?object a ent:Character .
+                ?object pred:starred_at ?anime .
+                ?anime a ent:Anime .
                 ?anime pred:title "{title}" .
-                ?anime ?pred ?object .
                 ?object pred:char_name ?charname .
                 ?object pred:role ?charrole .
                 ?vc pred:played ?object .
                 ?vc pred:va_name ?vcname .
+                ?vc a ent:VoiceActor .
             }}
             UNION
             {{
+                ?object a ent:Opening .
+                ?object pred:op_played_in ?anime .
+       			?anime a ent:Anime .
                 ?anime pred:title "{title}" .
-                ?anime ?pred ?object .
                 ?object pred:op_name ?opname .
                 ?object pred:played_by ?op .
+                ?op a ent:Singer .
                 ?op pred:sing_name ?opa .
+            }}
+            UNION
+            {{
+                ?object a ent:Ending .
+                ?object pred:end_played_in ?anime .
+       			?anime a ent:Anime .
+                ?anime pred:title "{title}" .
+                ?object pred:end_name ?endname .
+                ?object pred:played_by ?end .
+                ?end a ent:Singer .
+                ?end pred:sing_name ?enda .
             }}
         }}
     """
@@ -158,7 +183,6 @@ def animeTitle(request, title):
         print(e)
 
     data = refactorData(res)
-    print(data)
 
     return render(request, "anime.html", {'data': data})
 
@@ -172,7 +196,8 @@ def randomAnime(request):
         PREFIX pred: <http://anin3/pred/>
         SELECT ?title
         WHERE {{
-            ?anime pred:rank "{rank}" .
+            ?anime a ent:Anime .
+            ?anime pred:rank {rank} .
             ?anime pred:title ?title .
         }}
     """
@@ -197,23 +222,26 @@ def searchByName(request):
         SELECT ?charname ?title ?vcname
         WHERE {{
             {{
-                ?s pred:title ?title .
-                FILTER (contains(?title, "{text}"))
-            }}
+                    ?anime a ent:Anime .
+                    ?anime pred:title ?title .
+                    FILTER (contains(?title, "{text}"))
+                }}
             UNION
             {{
-                ?s pred:starring ?character .
-                ?character pred:char_name ?charname .
-                ?s pred:title ?title .
-                FILTER (contains(?charname, "{text}"))        
-            }}
+                    ?character a ent:Character .
+                    ?character pred:char_name ?charname .
+                    ?character pred:starred_at ?anime .
+                    ?anime pred:title ?title .
+                    FILTER (contains(?charname, "{text}"))        
+                }}
             UNION
             {{
-                ?s pred:voiced_at ?vc .
-                ?vc pred:va_name ?vcname .
-                ?s pred:title ?title .
-                FILTER (contains(?vcname, "{text}"))
-            }}
+                    ?voiceactor a ent:VoiceActor .
+                    ?voiceactor pred:va_name ?vcname .
+                    ?voiceactor pred:voiced_in ?anime .
+                    ?anime pred:title ?title .
+                    FILTER (contains(?vcname, "{text}"))
+                }}
         }}
     """
 
@@ -247,10 +275,12 @@ def getGenres(request):
         SELECT DISTINCT ?genres
         WHERE {{ 
             {{
+                ?s a ent:Anime .
                 ?s pred:theme ?genres .
             }}
             UNION
             {{
+                ?s a ent:Anime .
                 ?s pred:genre ?genres .
             }}
         }}
@@ -283,10 +313,12 @@ def animeByGenre(request, genre):
         SELECT DISTINCT ?title ?rank
         WHERE {{ 
             {{
+                ?anime a ent:Anime .
                 ?anime pred:theme "{genre}" .
             }}
             UNION
             {{
+                ?anime a ent:Anime .
                 ?anime pred:genre "{genre}" .
             }}
             {{
@@ -316,6 +348,8 @@ def animeByGenre(request, genre):
 
 
 def insertData(request):
+    global NEW_ANIME_COUNT
+
     if request.method == 'POST':
         # Get the form data
         title = request.POST.get('title')
@@ -332,7 +366,10 @@ def insertData(request):
         studio = request.POST.get('studio')
         demographic = request.POST.get('demo')
 
-        identification = re.sub("[^\d\w\'°.]", "", title)
+        title = re.sub("[<>\"]", "", title).replace("\\", "")
+
+        identification = "AnimeInserted" + NEW_ANIME_COUNT
+        NEW_ANIME_COUNT += 1
 
         query = f"""
             PREFIX ent: <http://anin3/ent/>

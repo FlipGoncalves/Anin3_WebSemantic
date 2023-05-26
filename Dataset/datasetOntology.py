@@ -34,7 +34,7 @@ for _, rank, title, link, score, type, episodes, source, status, premiered, aire
     while same:
         same = False
         for s,p,o in g.triples((URIRef("http://anin3/ent/"+anime_ID), None, None)):
-            if p == pred.title:
+            if p == pred.title and o == Literal(title):
                 same = False
                 break
             same = True
@@ -78,7 +78,6 @@ for _, rank, title, link, score, type, episodes, source, status, premiered, aire
     if pd.notna(adaptation):
         adaptation = removeTitle(adaptation)
         g.add((anime_ID, pred.adapted_from, Literal(adaptation)))
-
 
     if pd.notna(sequel):
         sequel_ID = removeID(removeTitle(sequel))
