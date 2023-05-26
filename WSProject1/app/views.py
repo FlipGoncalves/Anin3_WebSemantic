@@ -189,7 +189,7 @@ def animeTitle(request, title):
 
     query_wikidata = f"""
     SELECT ?id ?pred_label ?sub_label WHERE {{
-    ?id rdfs:label "Naruto"@en.
+    ?id rdfs:label|skos:altLabel "{title}"@en.
     ?id p:P31 ?statement0.
     ?statement0 ps:P31 wd:Q63952888.
     ?id ?pred ?sub .
