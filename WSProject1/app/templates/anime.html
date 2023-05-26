@@ -23,6 +23,9 @@
 	<li class="nav-item">
 	  <a class="nav-link" data-toggle="tab" href="#openings" role="tab">Openings and Endings</a>
 	</li>
+	<li class="nav-item">
+		<a class="nav-link" data-toggle="tab" href="#wikidata" role="tab">Wikidata</a>
+	</li>
   </ul>
   
   <div class="tab-content">
@@ -185,6 +188,21 @@
 			</div>
 		</div>
 		{% endfor %}
+		</div>
+	</div>
+
+	<div id="wikidata" class="tab-pane fade" role="tabpanel">
+		<div class="row">
+			{% for item in data.wikidata %}
+			<div class="col-sm-3">
+				<div class="card border-primary mb-3" style="max-width: 18rem;">
+					<div class="card-body text-dark">
+						<h5 class="card-title">{{item.label}}</h5>
+						<p class="card-text"> {{item.value}}</a></p>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
 		</div>
 	</div>
 </div>
