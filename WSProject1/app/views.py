@@ -8,8 +8,10 @@ import requests
 import re
 from SPARQLWrapper import SPARQLWrapper, JSON
 
-sparql = SPARQLWrapper("http://localhost:7200/repositories/anin3")
-sparql.setReturnFormat(JSON)
+sparql_repo = SPARQLWrapper("http://localhost:7200/repositories/anin3")
+sparql_repo.setReturnFormat(JSON)
+sparql_wikidata = SPARQLWrapper("https://query.wikidata.org/sparql")
+sparql_wikidata.setReturnFormat(JSON)
 pred = "http://anin3/pred/"
 
 
@@ -66,12 +68,14 @@ def homePage(request):
         }} LIMIT 10
     """
 
-    sparql.setQuery(query)
+    sparql_repo.setQuery(query)
     
     data = {"animes": []}
 
+    print("teste")
+
     try:
-        res = sparql.queryAndConvert()
+        res = sparql_repo.queryAndConvert()
 
         for a in res['results']['bindings']:
             data["animes"].append({"Title": a['title']['value'], "Rank": a['rk']['value']})
@@ -99,12 +103,12 @@ def voiceActor(request, nome):
         }}
     """
 
-    sparql.setQuery(query)
+    sparql_repo.setQuery(query)
     
     data = {"Name": nome}
 
     try:
-        res = sparql.queryAndConvert()
+        res = sparql_repo.queryAndConvert()
 
         for a in res['results']['bindings']:
             if "Characters" in data.keys():
@@ -148,17 +152,50 @@ def animeTitle(request, title):
         }}
     """
     
-    sparql.setQuery(query)
+    sparql_repo.setQuery(query)
 
     try:
 
-        res = sparql.queryAndConvert()
-        
+        res = sparql_repo.queryAndConvert()
+
     except Exception as e:
         print(e)
 
     data = refactorData(res)
-    print(data)
+
+    query_wikidata = f"""
+    SELECT ?id ?pred_label ?sub_label WHERE {{
+    ?id rdfs:label "Naruto"@en.
+    ?id p:P31 ?statement0.
+    ?statement0 ps:P31 wd:Q63952888.
+    ?id ?pred ?sub .
+    ?pred2 wikibase:directClaim ?pred;
+    rdfs:label ?pred_label.
+    ?sub rdfs:label ?sub_label.
+    FILTER(((LANG(?sub_label)) = "en") && ((LANG(?pred_label)) = "en"))
+    SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en". }}
+    }}
+    """
+
+    print("teste")
+
+    sparql_wikidata.setQuery(query_wikidata)
+
+    data["Wikidata"] = []
+    try:
+        res = sparql_wikidata.queryAndConvert()
+
+        for a in res['results']['bindings']:
+            data["Wikidata"].append({"pred_label": a['pred_label']['value'], "sub_label" : a['sub_label']['value']})
+        # for a in res['results']['bindings']:
+        #     if "Characters" in data.keys():
+        #         data["Characters"].append({"Name": a['character_name']['value'], "Role": a['role']['value'], "Anime": a['animename']['value']})    
+        #     else:
+        #         data["Characters"] = [{"Name": a['character_name']['value'], "Role": a['role']['value'], "Anime": a['animename']['value']}]
+    except Exception as e:
+        print(e)
+
+    print(data["Wikidata"])
 
     return render(request, "anime.html", {'data': data})
 
@@ -176,11 +213,11 @@ def randomAnime(request):
             ?anime pred:title ?title .
         }}
     """
-    sparql.setQuery(query)
+    sparql_repo.setQuery(query)
 
     try:
 
-        res = sparql.queryAndConvert()
+        res = sparql_repo.queryAndConvert()
 
     except Exception as e:
         print(e)
@@ -219,11 +256,11 @@ def searchByName(request):
 
     data = {"animes": [], "characters": [], "voiceactors": []}
 
-    sparql.setQuery(query)
+    sparql_repo.setQuery(query)
 
     try:
 
-        res = sparql.queryAndConvert()
+        res = sparql_repo.queryAndConvert()
 
         for a in res['results']['bindings']:
             if "charname" in a.keys():
@@ -258,11 +295,11 @@ def getGenres(request):
 
     data = {"genres": []}
 
-    sparql.setQuery(query)
+    sparql_repo.setQuery(query)
 
     try:
 
-        res = sparql.queryAndConvert()
+        res = sparql_repo.queryAndConvert()
 
         for a in res['results']['bindings']:
             data["genres"].append(a["genres"]["value"])
@@ -299,11 +336,11 @@ def animeByGenre(request, genre):
 
     data = {"animes": []}
 
-    sparql.setQuery(query)
+    sparql_repo.setQuery(query)
 
     try:
 
-        res = sparql.queryAndConvert()
+        res = sparql_repo.queryAndConvert()
 
         for a in res['results']['bindings']:
             data["animes"].append({"Title": a['title']['value'], "Rank": a['rank']['value']})

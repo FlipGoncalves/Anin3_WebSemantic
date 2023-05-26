@@ -193,12 +193,12 @@
 
 	<div id="wikidata" class="tab-pane fade" role="tabpanel">
 		<div class="row">
-			{% for item in data.wikidata %}
+			{% for item in data.Wikidata %}
 			<div class="col-sm-3">
 				<div class="card border-primary mb-3" style="max-width: 18rem;">
 					<div class="card-body text-dark">
-						<h5 class="card-title">{{item.label}}</h5>
-						<p class="card-text"> {{item.value}}</a></p>
+						<h5 class="card-title">{{item.pred_label}}</h5>
+						<p class="card-text"> {{item.sub_label}}</a></p>
 					</div>
 				</div>
 			</div>
