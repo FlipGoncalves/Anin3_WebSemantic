@@ -18,7 +18,6 @@ NEW_ANIME_COUNT = 0
 
 def refactorData(res):
 
-    # data = {"theme": [], "genre": []}
     data = {"theme": [], "genre": [], "characters": [], "openings": [], "endings": []}
 
     for a in res['results']['bindings']:
@@ -34,24 +33,12 @@ def refactorData(res):
         else:
             if "charname" in a.keys():
                 data["characters"].append({"name": a['charname']['value'], "role": a['charrole']['value'], "voiceactor": a['vcname']['value']})
-                # if "characters" in data.keys():
-                #     data["characters"].append({"name": a['charname']['value'], "role": a['charrole']['value'], "voiceactor": a['vcname']['value']})    
-                # else:
-                #     data["characters"] = [{"name": a['charname']['value'], "role": a['charrole']['value'], "voiceactor": a['vcname']['value']}]
 
             elif "opname" in a.keys():
                 data["openings"].append({"name": a['opname']['value'], "opartist": a['opa']['value']}) 
-                # if "openings" in data.keys():
-                #     data["openings"].append({"name": a['opname']['value'], "opartist": a['opa']['value']})    
-                # else:
-                #     data["openings"] = [{"name": a['opname']['value'], "opartist": a['opa']['value']}]
 
             elif "endname" in a.keys():
                 data["endings"].append({"name": a['endname']['value'], "endartist": a['enda']['value']}) 
-                # if "endings" in data.keys():
-                #     data["endings"].append({"name": a['opname']['value'], "endartist": a['opa']['value']})    
-                # else:
-                #     data["endings"] = [{"name": a['opname']['value'], "endartist": a['opa']['value']}]
 
     return data
 
@@ -406,11 +393,11 @@ def characters(request):
 
     data = {"Characters": []}
 
-    sparql.setQuery(query)
+    sparql_repo.setQuery(query)
 
     try:
 
-        res = sparql.queryAndConvert()
+        res = sparql_repo.queryAndConvert()
 
         for a in res['results']['bindings']:
             data["Characters"].append({"Name": a["charname"]["value"], "Anime": a["animename"]["value"]})
