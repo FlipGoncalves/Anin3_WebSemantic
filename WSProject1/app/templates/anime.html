@@ -23,9 +23,6 @@
 	<li class="nav-item">
 	  <a class="nav-link" data-toggle="tab" href="#openings" role="tab">Openings and Endings</a>
 	</li>
-	<li class="nav-item">
-		<a class="nav-link" data-toggle="tab" href="#wikidata" role="tab">Wikidata</a>
-	</li>
   </ul>
   
   <div class="tab-content">
@@ -141,7 +138,24 @@
 					  <p class="card-text">{{ data.premiered }}</p>
 					</div>
 				</div>
+				{% for item in data.Wikidata %}
+				<div class="card w-50">
+					<div class="card-body">
+						<h5 class="card-title">{{item.pred_label}}</h5>
+						<p class="card-text"> {{item.sub_label}}</a></p>
+					</div>
+				</div>
+				{% endfor %}
+				{% for item in data.dbpedia %}
+				<div class="card w-50">
+					<div class="card-body">
+						<h5 class="card-title">{{item.pred_label}}</h5>
+						<p class="card-text"> {{item.sub_label}}</a></p>
+					</div>
+				</div>
+				{% endfor %}
 			</div>
+
 		</section>
 	</div>
 	<div id="characters" class="tab-pane fade" role="tabpanel">
@@ -188,21 +202,6 @@
 			</div>
 		</div>
 		{% endfor %}
-		</div>
-	</div>
-
-	<div id="wikidata" class="tab-pane fade" role="tabpanel">
-		<div class="row">
-			{% for item in data.Wikidata %}
-			<div class="col-sm-3">
-				<div class="card border-primary mb-3" style="max-width: 18rem;">
-					<div class="card-body text-dark">
-						<h5 class="card-title">{{item.pred_label}}</h5>
-						<p class="card-text"> {{item.sub_label}}</a></p>
-					</div>
-				</div>
-			</div>
-			{% endfor %}
 		</div>
 	</div>
 </div>

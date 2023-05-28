@@ -5,3 +5,5 @@ django-jquery
 bootstrap4
 pandas
 sparqlwrapper
+django_forms_bootstrap
+django-bootstrap4

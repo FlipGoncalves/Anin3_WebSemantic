@@ -12,6 +12,8 @@ sparql_repo = SPARQLWrapper("http://localhost:7200/repositories/anin3")
 sparql_repo.setReturnFormat(JSON)
 sparql_wikidata = SPARQLWrapper("https://query.wikidata.org/sparql")
 sparql_wikidata.setReturnFormat(JSON)
+sparql_dbpedia = SPARQLWrapper("https://dbpedia.org/sparql")
+sparql_dbpedia.setReturnFormat(JSON)
 pred = "http://anin3/pred/"
 
 NEW_ANIME_COUNT = 0
@@ -196,30 +198,77 @@ def animeTitle(request, title):
     ?pred2 wikibase:directClaim ?pred;
     rdfs:label ?pred_label.
     ?sub rdfs:label ?sub_label.
+    FILTER(?pred = wdt:P57 || ?pred = wdt:P364 || ?pred = wdt:P750 || ?pred = wdt:P8670 || ?pred = wdt:P272)
     FILTER(((LANG(?sub_label)) = "en") && ((LANG(?pred_label)) = "en"))
     SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en". }}
     }}
     """
-
-    print("teste")
 
     sparql_wikidata.setQuery(query_wikidata)
 
     data["Wikidata"] = []
     try:
         res = sparql_wikidata.queryAndConvert()
-
+        data["Wikidata"].append({"pred_label": "Wikidata Identifier", "sub_label" : res['results']['bindings'][0]['id']['value']})
         for a in res['results']['bindings']:
             data["Wikidata"].append({"pred_label": a['pred_label']['value'], "sub_label" : a['sub_label']['value']})
-        # for a in res['results']['bindings']:
-        #     if "Characters" in data.keys():
-        #         data["Characters"].append({"Name": a['character_name']['value'], "Role": a['role']['value'], "Anime": a['animename']['value']})    
-        #     else:
-        #         data["Characters"] = [{"Name": a['character_name']['value'], "Role": a['role']['value'], "Anime": a['animename']['value']}]
     except Exception as e:
         print(e)
 
-    print(data["Wikidata"])
+    data['dbpedia'] = []
+
+    title_dbpedia = "/" + title.replace(' ', '_')
+
+    query = f"""
+    SELECT * WHERE {{
+        ?res a dbo:Anime
+        FILTER regex(?res, "{title}", "i")
+    }}
+    """
+
+    sparql_dbpedia.setQuery(query)
+
+    dbpedia_uri = ""
+
+    try:
+        ret = sparql_dbpedia.queryAndConvert()
+
+        print(title_dbpedia)
+
+        for r in ret["results"]["bindings"]:
+            temp2 = "http://dbpedia.org/resource" + title_dbpedia
+            temp3 = "http://dbpedia.org/resource" + title_dbpedia + "__tv_series__1"
+            if r['res']['value'] == temp2 or r['res']['value'] == temp3:
+                print("nice")
+                dbpedia_uri = r['res']['value']
+                print(dbpedia_uri)
+                data['dbpedia'].append({"pred_label": "DBPedia Resource URI", "sub_label" : dbpedia_uri})
+    except Exception as e:
+        print(e)
+
+    query = f"""
+    SELECT distinct ?sub_label ?pred_label
+    WHERE {{
+    <{dbpedia_uri}> ?property ?value .
+    ?property rdfs:label ?pred_label .
+    ?value rdfs:label ?sub_label .
+    FILTER(lang(?pred_label) = "en" && lang(?sub_label) = "en")
+    }}
+    """
+
+    sparql_dbpedia.setQuery(query)
+
+    try:
+        ret = sparql_dbpedia.queryAndConvert()
+        print(ret)
+        for r in ret["results"]["bindings"]:
+            print("fuck")
+            print(r)
+            data["dbpedia"].append({"pred_label": r['pred_label']['value'], "sub_label" : r['sub_label']['value']})
+    except Exception as e:
+        print(e)
+
+    print(data["dbpedia"])
 
     return render(request, "anime.html", {'data': data})
 
