@@ -10,7 +10,7 @@
 <head>
 
 <button id="btn" class="btn btn-primary" style="float: right; position: relative; top: 25px; right: 10px;">Download Anime Info</button>
-<h1 class="pt-3">{{ data.title }}</h1>
+<h1 class="pt-3" property="name">{{ data.title }}</h1>
 
 
 <ul class="nav nav-tabs pt-3" role="tablist">
@@ -35,11 +35,11 @@
 				<div class="row">
 					<div class="col-md-4 d-flex justify-content-center">
 					  	Score: 
-					  	<p class="card-text"> {{ data.score }}</p>
+					  	<p class="card-text" property="aggregateRating"> {{ data.score }}</p>
 					</div>
 					<div class="col-md-4 d-flex justify-content-center">
 						Rank: 
-						<p class="card-text">{{ data.rank }}</p>
+						<p class="card-text" property="position">{{ data.rank }}</p>
 					</div>
 					<div class="col-md-4 d-flex justify-content-center">
 						Number of Raters: 
@@ -55,7 +55,7 @@
 			{% for g in data.genre %}
 				{% if g != '' %}
 					<div class="col-md-auto">
-						<h4><a href="{% url 'genreTitle' genre=g %}" class="badge badge-dark" >{{ g }}</a></h4>
+						<h4><a href="{% url 'genreTitle' genre=g %}" class="badge badge-dark" property="genre">{{ g }}</a></h4>
 					</div>
 				{% endif %}
 			{% endfor %}
@@ -64,7 +64,7 @@
 		<section>
 			<h2 class="pt-3">Studios</h2>
 			<hr>
-			<h4><a href="#" class="badge badge-dark">{{ data.made_by }}</a></h4>
+			<h4><a href="#" class="badge badge-dark" property="producer">{{ data.made_by }}</a></h4>
 		</section>
 		<section>
 			<h2 class="pt-3">Themes</h2>
@@ -72,7 +72,7 @@
 			<div class="row">
 			{% for g in data.theme %}
 				<div class="col-md-auto">
-					<h4><a href="{% url 'genreTitle' genre=g %}" class="badge badge-dark" >{{ g }}</a></h4>
+					<h4><a href="{% url 'genreTitle' genre=g %}" class="badge badge-dark" property="contentRating">{{ g }}</a></h4>
 				</div>
 			{% endfor %}
 			</div>
@@ -90,49 +90,49 @@
 				<div class="card w-50">
 					<div class="card-body">
 					  <h5 class="card-title">Number of Episodes</h5>
-					  <p class="card-text">{{ data.num_episodes }}</p>
+					  <p class="card-text" >{{ data.num_episodes }}</p>
 					</div>
 				</div>
 				<div class="card w-50">
 					<div class="card-body">
 					  <h5 class="card-title">Duration</h5>
-					  <p class="card-text">{{ data.duration }}</p>
+					  <p class="card-text" property="temporalCoverage">{{ data.duration }}</p>
 					</div>
 				</div>
 				<div class="card w-50">
 					<div class="card-body">
 					  <h5 class="card-title">Source</h5>
-					  <p class="card-text">{{ data.source }}</p>
+					  <p class="card-text" >{{ data.source }}</p>
 					</div>
 				</div>
 				<div class="card w-50">
 					<div class="card-body">
 					  <h5 class="card-title">Aired Date</h5>
-					  <p class="card-text">{{ data.aired_date }}</p>
+					  <p class="card-text" property="releasedEvent">{{ data.aired_date }}</p>
 					</div>
 				</div>
 				<div class="card w-50">
 					<div class="card-body">
 					  <h5 class="card-title">Status</h5>
-					  <p class="card-text">{{ data.status }}</p>
+					  <p class="card-text" property="Status">{{ data.status }}</p>
 					</div>
 				</div>
 				<div class="card w-50">
 					<div class="card-body">
 					  <h5 class="card-title">Age Rating</h5>
-					  <p class="card-text">{{ data.age_rating }}</p>
+					  <p class="card-text" property="contentRating">{{ data.age_rating }}</p>
 					</div>
 				</div>
 				<div class="card w-50">
 					<div class="card-body">
 					  <h5 class="card-title">Demographic</h5>
-					  <p class="card-text">{{ data.demographic }}</p>
+					  <p class="card-text" property="contentRating">{{ data.demographic }}</p>
 					</div>
 				</div>
 				<div class="card w-50">
 					<div class="card-body">
 					  <h5 class="card-title">Adapted From</h5>
-					  <p class="card-text">{{ data.adapted_from }}</p>
+					  <p class="card-text" property="isBasedOn">{{ data.adapted_from }}</p>
 					</div>
 				</div>
 				<div class="card w-50">
@@ -150,7 +150,7 @@
 			{% for character in data.characters %}
 				<div class="col-sm-3">
 					<div class="card border-primary mb-3" style="max-width: 18rem;">
-							<div class="card-header">Role: {{ character.role }}</div>
+							<div class="card-header" property="character">Role: {{ character.role }}</div>
 							<div class="card-body text-dark">
 							<h5 class="card-title">Name: {{ character.name }}</h5>
 							<p class="card-text"><a href="{% url 'voiceActor' nome=character.voiceactor %}">Voice Actor:{{ character.voiceactor }}</a></p>
@@ -193,12 +193,12 @@
 
 	<div id="wikidata" class="tab-pane fade" role="tabpanel">
 		<div class="row">
-			{% for item in data.wikidata %}
+			{% for item in data.Wikidata %}
 			<div class="col-sm-3">
 				<div class="card border-primary mb-3" style="max-width: 18rem;">
 					<div class="card-body text-dark">
-						<h5 class="card-title">{{item.label}}</h5>
-						<p class="card-text"> {{item.value}}</a></p>
+						<h5 class="card-title">{{item.pred_label}}</h5>
+						<p class="card-text"> {{item.sub_label}}</a></p>
 					</div>
 				</div>
 			</div>

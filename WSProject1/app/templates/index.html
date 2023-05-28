@@ -29,9 +29,9 @@
 	{% for anime in data %}
 	<div class="col-sm-3">
 		<div class="card border-primary mb-3" style="height:175px" style="max-width: 18rem;">
-				<div class="card-header">Rank: #{{anime.Rank}}</div>
+				<div class="card-header" property="position">Rank: #{{anime.Rank}}</div>
 				<div class="card-body text-primary">
-					<h5 class="card-title">Name: <a href="{% url 'animeTitle' title=anime.Title %}">{{anime.Title}}</a></h5>
+					<h5 class="card-title">Name: <a href="{% url 'animeTitle' title=anime.Title %}" property="name">{{anime.Title}}</a></h5>
 					<p class="card-text"></p>
 				</div>
 		</div>

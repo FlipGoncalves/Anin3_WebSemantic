@@ -9,8 +9,8 @@
 			<div class="card border-primary mb-3" style="max-width: 18rem;">
 					<div class="card-header">Role: {{ character.Role }}</div>
 					<div class="card-body text-dark">
-					<h5 class="card-title">Name: {{ character.Name }}</h5>
-					<p class="card-text"><a href="{% url 'animeTitle' title=character.Anime %}">{{ character.Anime }}</a></p>
+					<h5 class="card-title" property="character">Name: {{ character.Name }}</h5>
+					<p class="card-text"><a href="{% url 'animeTitle' title=character.Anime %}" property="name">{{ character.Anime }}</a></p>
 					</div>
 			</div>
 		</div>

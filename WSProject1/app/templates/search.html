@@ -11,7 +11,7 @@
 		<div class="col-sm-3">
 			<div class="card border-primary mb-3" style="max-width: 18rem;">
 					<div class="card-body text-dark">
-					<h5 class="card-title">Name: <a href="{% url 'animeTitle' title=anime.Title %}">{{ anime.Title }}</a></h5>
+					<h5 class="card-title">Name: <a href="{% url 'animeTitle' title=anime.Title %}" property="name">{{ anime.Title }}</a></h5>
 					</div>
 			</div>
 		</div>
@@ -26,7 +26,7 @@
 			<div class="card border-primary mb-3" style="max-width: 18rem;">
 					<div class="card-body text-dark">
 					<h5 class="card-title">Name: {{ character.Character }}</h5>
-                    <p class="card-text">Anime: <a href="{% url 'animeTitle' title=character.Title %}">{{ character.Title }}</a></p>	
+                    <p class="card-text">Anime: <a href="{% url 'animeTitle' title=character.Title %}" property="character">{{ character.Title }}</a></p>	
                 </div>
 			</div>
 		</div>

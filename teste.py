@@ -77,6 +77,23 @@ sparql.setReturnFormat(JSON)
 # }
 # """)
 
+
+query_wikidata = f"""
+    SELECT ?id ?pred_label ?sub_label WHERE {{
+    ?id rdfs:label "Naruto: Shippuuden"@en.
+    ?id p:P31 ?statement0.
+    ?statement0 ps:P31 wd:Q63952888.
+    ?id ?pred ?sub .
+    ?pred2 wikibase:directClaim ?pred;
+    rdfs:label ?pred_label.
+    ?sub rdfs:label ?sub_label.
+    FILTER(((LANG(?sub_label)) = "en") && ((LANG(?pred_label)) = "en"))
+    SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en". }}
+    }}
+"""
+
+sparql.setQuery(query_wikidata)
+
 try:
     ret = sparql.queryAndConvert()
 
