@@ -347,6 +347,43 @@ def animeByGenre(request, genre):
     return render(request, "genre.html", {'data': data, 'genre': genre})
 
 
+def characters(request):
+    
+    query = f"""
+        PREFIX ent: <http://anin3/ent/>
+        PREFIX pred: <http://anin3/pred/>
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+        SELECT ?charname ?animename WHERE {{
+            ?char a ent:Character .
+            ?char pred:char_name ?charname .
+            ?char pred:starred_at ?anime .
+            ?char pred:role ?role .
+            ?anime a ent:Anime .
+            ?anime pred:title ?animename .
+            ?anime pred:rank ?rank .
+            FILTER (?role = "Main")
+        }} ORDER BY ASC(xsd:integer(?rank)) LIMIT 200
+
+    """
+
+    data = {"Characters": []}
+
+    sparql.setQuery(query)
+
+    try:
+
+        res = sparql.queryAndConvert()
+
+        for a in res['results']['bindings']:
+            data["Characters"].append({"Name": a["charname"]["value"], "Anime": a["animename"]["value"]})
+
+    except Exception as e:
+        print(e)
+
+    return render(request, "allgenre.html", {'data': data})
+
+
 def insertData(request):
     global NEW_ANIME_COUNT
 
