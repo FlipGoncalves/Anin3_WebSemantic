@@ -20,7 +20,6 @@ NEW_ANIME_COUNT = 0
 
 def refactorData(res):
 
-    # data = {"theme": [], "genre": []}
     data = {"theme": [], "genre": [], "characters": [], "openings": [], "endings": []}
 
     for a in res['results']['bindings']:
@@ -36,24 +35,12 @@ def refactorData(res):
         else:
             if "charname" in a.keys():
                 data["characters"].append({"name": a['charname']['value'], "role": a['charrole']['value'], "voiceactor": a['vcname']['value']})
-                # if "characters" in data.keys():
-                #     data["characters"].append({"name": a['charname']['value'], "role": a['charrole']['value'], "voiceactor": a['vcname']['value']})    
-                # else:
-                #     data["characters"] = [{"name": a['charname']['value'], "role": a['charrole']['value'], "voiceactor": a['vcname']['value']}]
 
             elif "opname" in a.keys():
                 data["openings"].append({"name": a['opname']['value'], "opartist": a['opa']['value']}) 
-                # if "openings" in data.keys():
-                #     data["openings"].append({"name": a['opname']['value'], "opartist": a['opa']['value']})    
-                # else:
-                #     data["openings"] = [{"name": a['opname']['value'], "opartist": a['opa']['value']}]
 
             elif "endname" in a.keys():
                 data["endings"].append({"name": a['endname']['value'], "endartist": a['enda']['value']}) 
-                # if "endings" in data.keys():
-                #     data["endings"].append({"name": a['opname']['value'], "endartist": a['opa']['value']})    
-                # else:
-                #     data["endings"] = [{"name": a['opname']['value'], "endartist": a['opa']['value']}]
 
     return data
 
@@ -431,6 +418,43 @@ def animeByGenre(request, genre):
     
     data = sorted(data["animes"], key=lambda a: int(a["Rank"]))
     return render(request, "genre.html", {'data': data, 'genre': genre})
+
+
+def characters(request):
+    
+    query = f"""
+        PREFIX ent: <http://anin3/ent/>
+        PREFIX pred: <http://anin3/pred/>
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+        SELECT ?charname ?animename WHERE {{
+            ?char a ent:Character .
+            ?char pred:char_name ?charname .
+            ?char pred:starred_at ?anime .
+            ?char pred:role ?role .
+            ?anime a ent:Anime .
+            ?anime pred:title ?animename .
+            ?anime pred:rank ?rank .
+            FILTER (?role = "Main")
+        }} ORDER BY ASC(xsd:integer(?rank)) LIMIT 200
+
+    """
+
+    data = {"Characters": []}
+
+    sparql_repo.setQuery(query)
+
+    try:
+
+        res = sparql_repo.queryAndConvert()
+
+        for a in res['results']['bindings']:
+            data["Characters"].append({"Name": a["charname"]["value"], "Anime": a["animename"]["value"]})
+
+    except Exception as e:
+        print(e)
+
+    return render(request, "allgenre.html", {'data': data})
 
 
 def insertData(request):
