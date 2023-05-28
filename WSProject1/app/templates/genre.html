@@ -2,14 +2,14 @@
 
 {% block content %}
 <br>
-<h1>Genre: {{genre}}</h1>
+<h1>Genre: <span property="genre">{{genre}}</span></h1>
 <div class="row">
 	{% for anime in data %}
 		<div class="col-sm-3">
 			<div class="card border-primary mb-3" style="max-width: 18rem;">
-					<div class="card-header">Rank: {{ anime.Rank }}</div>
+					<div class="card-header">Rank: <span property="position">{{ anime.Rank }}</span></div>
 					<div class="card-body text-primary">
-					<h5 class="card-title">Name: <a href="{% url 'animeTitle' title=anime.Title %}">{{ anime.Title }}</a></h5>
+					<h5 class="card-title">Name: <a href="{% url 'animeTitle' title=anime.Title %}" property="name">{{ anime.Title }}</a></h5>
 					</div>
 			</div>
 		</div>
