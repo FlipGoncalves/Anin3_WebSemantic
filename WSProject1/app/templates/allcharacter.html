@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br>
+<h1>All Characters</h1>
+<div class="row">
+	{% for character in data.Characters %}
+		<div class="col-sm-3">
+			<div class="card border-primary mb-3" style="max-width: 18rem;">
+                    <div class="card-header">Anime: <a href="{% url 'animeTitle' title=character.Anime %}" property="title">{{ character.Anime }}</a></div>
+					<div class="card-body text-dark">
+					<h5 class="card-title">Name: <span property="character">{{ character.Name }}</span></h5>
+					</div>
+			</div>
+		</div>
+	{% endfor %}
+
+{% endblock %}

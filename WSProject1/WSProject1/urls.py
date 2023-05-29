@@ -30,4 +30,6 @@ urlpatterns = [
     path('search/', views.searchByName, name="searchByName"),
     path('allgenres/', views.getGenres, name="getGenres"),
     path('insert/', views.insertData, name="insertData"),
+    path('allcharacter/', views.characters, name="getCharacters")
+
 ]

@@ -454,7 +454,7 @@ def characters(request):
     except Exception as e:
         print(e)
 
-    return render(request, "allgenre.html", {'data': data})
+    return render(request, "allcharacter.html", {'data': data})
 
 
 def insertData(request):
