@@ -211,7 +211,7 @@ def animeTitle(request, title):
         SELECT * 
         WHERE {{
             ?res a dbo:Anime
-            FILTER regex(?res, "{title}", "i")
+            FILTER regex(?res, "{title_dbpedia}", "i")
         }}
     """
 
@@ -221,26 +221,23 @@ def animeTitle(request, title):
 
     try:
         ret = sparql_dbpedia.queryAndConvert()
-
-        print(title_dbpedia)
-
         for r in ret["results"]["bindings"]:
             temp2 = "http://dbpedia.org/resource" + title_dbpedia
             temp3 = "http://dbpedia.org/resource" + title_dbpedia + "__tv_series__1"
             if r['res']['value'] == temp2 or r['res']['value'] == temp3:
-                print("nice")
                 dbpedia_uri = r['res']['value']
-                print(dbpedia_uri)
                 data['dbpedia'].append({"pred_label": "DBPedia Resource URI", "sub_label" : dbpedia_uri})
     except Exception as e:
         print(e)
 
     query = f"""
+        PREFIX dbo: <http://dbpedia.org/ontology/>
         SELECT distinct ?sub_label ?pred_label
         WHERE {{
             <{dbpedia_uri}> ?property ?value .
             ?property rdfs:label ?pred_label .
             ?value rdfs:label ?sub_label .
+            FILTER(?property = dbo:network)
             FILTER(lang(?pred_label) = "en" && lang(?sub_label) = "en")
         }}
     """
@@ -249,15 +246,10 @@ def animeTitle(request, title):
 
     try:
         ret = sparql_dbpedia.queryAndConvert()
-        print(ret)
         for r in ret["results"]["bindings"]:
-            print("fuck")
-            print(r)
             data["dbpedia"].append({"pred_label": r['pred_label']['value'], "sub_label" : r['sub_label']['value']})
     except Exception as e:
         print(e)
-
-    print(data["dbpedia"])
 
     return render(request, "anime.html", {'data': data})
 
