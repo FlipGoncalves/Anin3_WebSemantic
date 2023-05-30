@@ -177,18 +177,19 @@ def animeTitle(request, title):
     data = refactorData(res)
 
     query_wikidata = f"""
-    SELECT ?id ?pred_label ?sub_label WHERE {{
-    ?id rdfs:label|skos:altLabel "{title}"@en.
-    ?id p:P31 ?statement0.
-    ?statement0 ps:P31 wd:Q63952888.
-    ?id ?pred ?sub .
-    ?pred2 wikibase:directClaim ?pred;
-    rdfs:label ?pred_label.
-    ?sub rdfs:label ?sub_label.
-    FILTER(?pred = wdt:P57 || ?pred = wdt:P364 || ?pred = wdt:P750 || ?pred = wdt:P8670 || ?pred = wdt:P272)
-    FILTER(((LANG(?sub_label)) = "en") && ((LANG(?pred_label)) = "en"))
-    SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en". }}
-    }}
+        SELECT ?id ?pred_label ?sub_label 
+        WHERE {{
+            ?id rdfs:label|skos:altLabel "{title}"@en.
+            ?id p:P31 ?statement0.
+            ?statement0 ps:P31 wd:Q63952888.
+            ?id ?pred ?sub .
+            ?pred2 wikibase:directClaim ?pred;
+            rdfs:label ?pred_label.
+            ?sub rdfs:label ?sub_label.
+            FILTER(?pred = wdt:P57 || ?pred = wdt:P364 || ?pred = wdt:P750 || ?pred = wdt:P8670 || ?pred = wdt:P272)
+            FILTER(((LANG(?sub_label)) = "en") && ((LANG(?pred_label)) = "en"))
+            SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en". }}
+        }}
     """
 
     sparql_wikidata.setQuery(query_wikidata)
@@ -207,10 +208,11 @@ def animeTitle(request, title):
     title_dbpedia = "/" + title.replace(' ', '_')
 
     query = f"""
-    SELECT * WHERE {{
-        ?res a dbo:Anime
-        FILTER regex(?res, "{title}", "i")
-    }}
+        SELECT * 
+        WHERE {{
+            ?res a dbo:Anime
+            FILTER regex(?res, "{title}", "i")
+        }}
     """
 
     sparql_dbpedia.setQuery(query)
@@ -234,13 +236,13 @@ def animeTitle(request, title):
         print(e)
 
     query = f"""
-    SELECT distinct ?sub_label ?pred_label
-    WHERE {{
-    <{dbpedia_uri}> ?property ?value .
-    ?property rdfs:label ?pred_label .
-    ?value rdfs:label ?sub_label .
-    FILTER(lang(?pred_label) = "en" && lang(?sub_label) = "en")
-    }}
+        SELECT distinct ?sub_label ?pred_label
+        WHERE {{
+            <{dbpedia_uri}> ?property ?value .
+            ?property rdfs:label ?pred_label .
+            ?value rdfs:label ?sub_label .
+            FILTER(lang(?pred_label) = "en" && lang(?sub_label) = "en")
+        }}
     """
 
     sparql_dbpedia.setQuery(query)
