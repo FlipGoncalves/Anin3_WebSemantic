@@ -174,7 +174,7 @@
 			{% endfor %}
 			</div>
 	</div>
-	<div id="openings" class="tab-pane fade" role="tabpanel">
+	<div id="openings" class="tab-pane fade" role="tabpanel" property="audio" typeof="MusicRecording">
 		<h2 class="pt-3">Openings</h2>
 		<hr>
 		<div class="row">
@@ -182,8 +182,8 @@
 			<div class="col-sm-3">
 				<div class="card border-primary mb-3" style="max-width: 18rem;">
 						<div class="card-body text-dark">
-						<h5 class="card-title">Name: {{ op.name }}</h5>
-						<p class="card-text"> Artist:{{ op.opartist }}</a></p>
+						<h5 class="card-title" property="inAlbum">Name: {{ op.name }}</h5>
+						<p class="card-text" property="byArtist"> Artist:{{ op.opartist }}</a></p>
 						</div>
 				</div>
 			</div>
@@ -196,8 +196,8 @@
 		<div class="col-sm-3">
 			<div class="card border-primary mb-3" style="max-width: 18rem;">
 					<div class="card-body text-dark">
-					<h5 class="card-title">Name: {{ ed.name }}</h5>
-					<p class="card-text"> Artist:{{ ed.endartist }}</a></p>
+					<h5 class="card-title" property="inAlbum">Name: {{ ed.name }}</h5>
+					<p class="card-text" property="byArtist"> Artist:{{ ed.endartist }}</a></p>
 					</div>
 			</div>
 		</div>
